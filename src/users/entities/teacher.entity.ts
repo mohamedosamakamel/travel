@@ -6,6 +6,9 @@ export type TeacherDocument = Teacher & Document;
 @Schema()
 export class Teacher {
   role: string;
+
+  @Prop({ required: true })
+  bio: Number;
 }
 
 const TeacherSchema = SchemaFactory.createForClass(Teacher);

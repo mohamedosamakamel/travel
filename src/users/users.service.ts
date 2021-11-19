@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseFilters } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Student, StudentSchema } from './entities/student.entity';
 import { Teacher } from './entities/teacher.entity';
-import { User, UserDocument } from './entities/_user.entity';
+import { User, UserDocument, UserSchema } from './entities/_user.entity';
 
 @Injectable()
 export class UsersService {
@@ -22,10 +22,13 @@ export class UsersService {
   async findAll() {
     // await new this.teacherModel({
     //   username: 'Lolo Amr',
-    //   email: 'remahTeacher@gmail.com',
+    //   email: 'remahTeach@gmail.com',
     //   password: '123456',
+    //   bio: '1',
     // }).save();
-    let users = await this.userModel.find();
+    let users = await this.userModel.findById('6197e004a1142fa049ab941e');
+    let test = await (users as any).isValidPassword('123456');
+    console.log(test);
     return users;
   }
 
