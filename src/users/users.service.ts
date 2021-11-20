@@ -21,14 +21,15 @@ export class UsersService {
 
   async findAll() {
     // await new this.teacherModel({
-    //   username: 'Lolo Amr',
-    //   email: 'remahTeach@gmail.com',
+    //   username: 'Lolo Amr  ',
+    //   email: 'remahTeacdshe@gmail.com',
     //   password: '123456',
     //   bio: '1',
     // }).save();
-    let users = await this.userModel.findById('6197e004a1142fa049ab941e');
-    let test = await (users as any).isValidPassword('123456');
-    console.log(test);
+    // let users = await this.userModel.findById('6197e004a1142fa049ab941e');
+    // let test = await (users as any).isValidPassword('123456');
+    // console.log(test);
+    let users = await this.userModel.find();
     return users;
   }
 

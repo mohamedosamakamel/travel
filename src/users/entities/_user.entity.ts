@@ -28,7 +28,14 @@ export class User {
   @Prop({ unique: true })
   email: string;
 
-  @Prop()
+  @Prop({
+    get: (username: string) => {
+      return username.toUpperCase();
+    },
+    set: (username: string) => {
+      return username.trim();
+    },
+  })
   username: string;
 
   @Prop()
@@ -37,6 +44,10 @@ export class User {
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
+
+UserSchema.virtual('NameAndEmail').get(function (this: UserDocument) {
+  return `${this.email} + ${this.username}`;
+});
 
 UserSchema.pre('save', async function () {
   const user = this;
