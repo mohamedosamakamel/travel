@@ -1,7 +1,8 @@
-import { Injectable, UseFilters } from '@nestjs/common';
+import { BadRequestException, Injectable, UseFilters } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Student, StudentSchema } from './entities/student.entity';
 import { Teacher } from './entities/teacher.entity';
@@ -15,8 +16,15 @@ export class UsersService {
     @InjectModel(Teacher.name) private teacherModel: Model<Teacher>,
   ) {}
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(registerationData: CreateUserDto) {
+    const prevUser = await this.userModel.findOne({
+      phone: registerationData.phone,
+    });
+    if (prevUser) throw new BadRequestException('phone should be unique');
+    let student: UserDocument = await new this.userModel(
+      registerationData,
+    ).save();
+    return student;
   }
 
   async findAll() {
@@ -33,15 +41,7 @@ export class UsersService {
     return users;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async findOne(filter: FilterUserDto) {
+    return await this.userModel.findOne(filter);
   }
 }

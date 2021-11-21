@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Model, ObjectId } from 'mongoose';
-import { Exclude, Transform, Type } from 'class-transformer';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
-
+import { Constants } from '../../utils/constants';
 export type UserDocument = User & Document;
 
 @Schema({
@@ -14,6 +13,8 @@ export type UserDocument = User & Document;
     virtuals: true,
     transform: (_, doc: Record<string, unknown>) => {
       delete doc.__v;
+      delete doc._id;
+      delete doc.password;
       return {
         ...doc,
       };
@@ -21,12 +22,25 @@ export type UserDocument = User & Document;
   },
 })
 export class User {
-  // @Transform(({ value }) => value.toString())
-  @Exclude()
-  _id: ObjectId;
-
-  @Prop({ unique: true })
+  @Prop({
+    index: true,
+    unique: true,
+    sparse: true,
+    match: Constants.EMAIL_REGX,
+    set: (email: string) => {
+      if (email === null) return undefined;
+    },
+  })
   email: string;
+
+  @Prop({
+    index: true,
+    unique: true,
+    sparse: true,
+    match: Constants.PHONE_REGX,
+    required: true,
+  })
+  phone: string;
 
   @Prop({
     get: (username: string) => {
@@ -35,19 +49,19 @@ export class User {
     set: (username: string) => {
       return username.trim();
     },
+    required: true,
   })
   username: string;
 
   @Prop()
-  @Exclude()
   password: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
 
-UserSchema.virtual('NameAndEmail').get(function (this: UserDocument) {
-  return `${this.email} + ${this.username}`;
-});
+// UserSchema.virtual('NameAndEmail').get(function (this: UserDocument) {
+//   return `${this.email} + ${this.username}`;
+// });
 
 UserSchema.pre('save', async function () {
   const user = this;
@@ -78,7 +92,6 @@ UserSchema.pre('save', async function () {
     }
   }
   if ((this as UserDocument).password && this.isModified('password')) {
-    console.log('here');
     (this as UserDocument).password = await hash(
       (this as UserDocument).password,
       10,
