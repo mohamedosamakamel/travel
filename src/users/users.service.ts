@@ -4,7 +4,11 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Student, StudentDocument, StudentSchema } from './entities/student.entity';
+import {
+  Student,
+  StudentDocument,
+  StudentSchema,
+} from './entities/student.entity';
 import { Teacher } from './entities/teacher.entity';
 import { User, UserDocument, UserSchema } from './entities/_user.entity';
 
@@ -47,11 +51,10 @@ export class UsersService {
   }
 
   async update(filter: FilterUserDto, updateUserData: UpdateUserDto) {
-    return await this.userModel.updateOne(
-      { phone: filter.phone },
-      updateUserData,
-    );
+    return await this.userModel.updateOne(filter, updateUserData);
   }
 
-  async getProfile() {}
+  async getProfile(me: User) {
+    return me;
+  }
 }

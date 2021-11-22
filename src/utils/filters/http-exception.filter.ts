@@ -15,7 +15,6 @@ export class AllExceptionsFilter<T extends HttpException>
     const ctx = host.switchToHttp();
     const response = ctx.getResponse();
     const request = ctx.getRequest();
-
     /**
      * @description Exception json response
      * @param message
@@ -37,6 +36,7 @@ export class AllExceptionsFilter<T extends HttpException>
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     } else {
+      console.log(exception);
       responseMessage(
         'Error',
         exception.message,

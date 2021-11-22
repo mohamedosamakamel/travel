@@ -1,6 +1,11 @@
-import { IsBoolean, IsMongoId } from 'class-validator';
+import { IsBoolean, IsMongoId, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @IsBoolean()
-  enabled: Boolean;
+  @IsOptional()
+  enabled?: Boolean;
+
+  @IsString()
+  @IsOptional()
+  photo?: string;
 }

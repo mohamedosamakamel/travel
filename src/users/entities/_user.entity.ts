@@ -65,6 +65,9 @@ export class User {
 
   @Prop({ default: false })
   enabled: Boolean;
+
+  @Prop()
+  photo: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
