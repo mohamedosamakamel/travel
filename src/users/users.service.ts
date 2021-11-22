@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Student, StudentSchema } from './entities/student.entity';
+import { Student, StudentDocument, StudentSchema } from './entities/student.entity';
 import { Teacher } from './entities/teacher.entity';
 import { User, UserDocument, UserSchema } from './entities/_user.entity';
 
@@ -21,14 +21,14 @@ export class UsersService {
       phone: registerationData.phone,
     });
     if (prevUser) throw new BadRequestException('phone should be unique');
-    let student: UserDocument = await new this.userModel(
+    let student: StudentDocument = await new this.studentModel(
       registerationData,
     ).save();
     return student;
   }
 
   async findAll() {
-    await this.userModel.deleteMany();
+    // await this.userModel.deleteMany();
     // await new this.teacherModel({
     //   username: 'Lolo Amr  ',
     //   email: 'remahTeacdshe@gmail.com',
@@ -52,4 +52,6 @@ export class UsersService {
       updateUserData,
     );
   }
+
+  async getProfile() {}
 }

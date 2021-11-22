@@ -3,7 +3,14 @@ import { Document, Model, ObjectId } from 'mongoose';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '../../utils/constants';
+
 export type UserDocument = User & Document;
+
+export enum UserRole {
+  ADMIN = 'Admin',
+  STUDENT = 'Student',
+  TEACHER = 'Teacher',
+}
 
 @Schema({
   discriminatorKey: 'role',
