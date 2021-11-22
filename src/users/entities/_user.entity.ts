@@ -55,6 +55,9 @@ export class User {
 
   @Prop()
   password: string;
+
+  @Prop({ default: false })
+  enabled: Boolean;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

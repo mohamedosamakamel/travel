@@ -4,12 +4,19 @@ import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as jwt from 'jsonwebtoken';
+import { PhoneConfirmationService } from 'src/phone-confirmation/phone-confirmation.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userService: UsersService) {}
+  constructor(
+    private readonly userService: UsersService,
+    private readonly phoneConfirmationService: PhoneConfirmationService,
+  ) {}
   async register(registerationData: RegisterDto) {
     let user = await this.userService.create(registerationData);
+    await this.phoneConfirmationService.sendSMS({
+      phone: registerationData.phone,
+    });
     return user;
   }
 
@@ -20,7 +27,8 @@ export class AuthService {
     if (!(await (user as any).isValidPassword(loginDto.password)))
       throw new UnauthorizedException('invalid credentials');
 
-    // TODO handle enabled
+    if (user.enabled === false)
+      throw new UnauthorizedException('your account is deactivated');
     const payload = {
       userId: user.id,
     };

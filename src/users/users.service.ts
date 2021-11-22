@@ -28,6 +28,7 @@ export class UsersService {
   }
 
   async findAll() {
+    await this.userModel.deleteMany();
     // await new this.teacherModel({
     //   username: 'Lolo Amr  ',
     //   email: 'remahTeacdshe@gmail.com',
@@ -43,5 +44,12 @@ export class UsersService {
 
   async findOne(filter: FilterUserDto) {
     return await this.userModel.findOne(filter);
+  }
+
+  async update(filter: FilterUserDto, updateUserData: UpdateUserDto) {
+    return await this.userModel.updateOne(
+      { phone: filter.phone },
+      updateUserData,
+    );
   }
 }

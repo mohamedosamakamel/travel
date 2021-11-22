@@ -38,9 +38,11 @@
     "mongoose-autopopulate": "^0.16.0",
     "mongoose-paginate-v2": "^1.4.2",
     "morgan": "^1.10.0",
+    "nestjs-twilio": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0"
+    "rxjs": "^7.2.0",
+    "twilio": "^3.71.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
@@ -54,6 +56,7 @@
     "@types/mongoose-paginate-v2": "^1.4.0",
     "@types/node": "^16.0.0",
     "@types/supertest": "^2.0.11",
+    "@types/twilio": "^3.19.3",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
     "@typescript-eslint/parser": "^4.28.2",
     "eslint": "^7.30.0",
