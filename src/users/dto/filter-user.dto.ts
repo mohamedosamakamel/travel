@@ -20,4 +20,7 @@ export class FilterUserDto {
 
   @IsString()
   googleId?: string;
+
+  @IsString()
+  facebookId?: string;
 }

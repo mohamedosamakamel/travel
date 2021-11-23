@@ -7,9 +7,10 @@ import { APP_GUARD } from '@nestjs/core';
 import { ApiKeyGuard } from './guards/api-key.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { GoogleOauthStrategy } from './strategies/googleStrategy.passport';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [UsersModule, PhoneConfirmationModule],
+  imports: [UsersModule, PhoneConfirmationModule, ConfigModule],
   controllers: [AuthController],
   providers: [
     AuthService,

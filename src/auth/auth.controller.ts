@@ -13,6 +13,7 @@ import { RegisterDto } from './dto/register.dto';
 import { Public } from './decorators/public.decorator';
 import { PhoneConfirmationService } from 'src/phone-confirmation/phone-confirmation.service';
 import { LoginGoogleDto } from './dto/login-google.dto';
+import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { GoogleOauthGuard } from './guards/googleToken.guard';
 import { REQUEST } from '@nestjs/core';
 import { User } from 'src/users/entities/_user.entity';
@@ -43,10 +44,15 @@ export class AuthController {
   }
 
   @Public()
-  @HttpCode(HttpStatus.OK)
   @UseGuards(GoogleOauthGuard)
   @Post('/login-googel')
-  async loginGoogle(@Body() LoginGoogleData: LoginGoogleDto) {
+  async loginGoogle(@Body() _loginGoogleData: LoginGoogleDto) {
     return await this.authService.loginGoogle(this.req.me as User);
+  }
+
+  @Public()
+  @Post('/login-facebook')
+  async loginFacebook(@Body() { accessToken }: LoginFacebookDto) {
+    return await this.authService.loginFacebook({ accessToken });
   }
 }
