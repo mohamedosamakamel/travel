@@ -6,13 +6,12 @@ import {
   Injectable,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Request } from 'express';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import * as jwt from 'jsonwebtoken';
 import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
-import TokenPayload from '../tokenPayload.interface';
+import RequestWithUser from '../interfaces/requestWithIUser.interface';
 @Injectable()
 export class ApiKeyGuard implements CanActivate {
   constructor(
@@ -24,7 +23,7 @@ export class ApiKeyGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     let token = null;
     const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
-    const request = context.switchToHttp().getRequest();
+    const request: RequestWithUser = context.switchToHttp().getRequest();
     request.header('authorization') &&
       (token = request.header('authorization').split(' ')[1]);
     if (isPublic) {
@@ -36,7 +35,11 @@ export class ApiKeyGuard implements CanActivate {
   }
 }
 
-const checkJWT = async (token, request, userService: UsersService) => {
+const checkJWT = async (
+  token,
+  request: RequestWithUser,
+  userService: UsersService,
+) => {
   return jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
     if (err) {
       if (err.name) {

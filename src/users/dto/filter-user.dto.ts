@@ -17,4 +17,7 @@ export class FilterUserDto {
   @IsString()
   @Matches(Constants.PHONE_REGX, { message: 'phone is invalid' })
   phone?: string;
+
+  @IsString()
+  googleId?: string;
 }

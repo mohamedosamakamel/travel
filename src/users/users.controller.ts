@@ -48,6 +48,9 @@ export class UsersController {
     @Body() updateUserData: UpdateUserDto,
   ) {
     if (files && files.photo) updateUserData.photo = files.photo[0].secure_url;
+
+    delete updateUserData.enabled;
+
     return await this.usersService.update(
       { _id: this.req.me } as FilterUserDto,
       updateUserData,

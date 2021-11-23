@@ -6,12 +6,14 @@ import { PhoneConfirmationModule } from 'src/phone-confirmation/phone-confirmati
 import { APP_GUARD } from '@nestjs/core';
 import { ApiKeyGuard } from './guards/api-key.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { GoogleOauthStrategy } from './strategies/googleStrategy.passport';
 
 @Module({
   imports: [UsersModule, PhoneConfirmationModule],
   controllers: [AuthController],
   providers: [
     AuthService,
+    GoogleOauthStrategy,
     { provide: APP_GUARD, useClass: ApiKeyGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],

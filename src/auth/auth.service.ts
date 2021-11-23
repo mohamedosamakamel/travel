@@ -4,16 +4,16 @@ import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import * as jwt from 'jsonwebtoken';
-import TokenPayload from './tokenPayload.interface';
+import TokenPayload from './interfaces/tokenPayload.interface';
+import { LoginGoogleDto } from './dto/login-google.dto';
+import { User } from 'src/users/entities/_user.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly userService: UsersService,
-  ) {}
+  constructor(private readonly userService: UsersService) {}
 
   async register(registerationData: RegisterDto) {
-    let user = await this.userService.create(registerationData);
+    let user = await this.userService.register(registerationData);
     return user;
   }
 
@@ -32,5 +32,9 @@ export class AuthService {
     const options = {};
     const token = jwt.sign(payload, process.env.JWT_SECRET, options);
     return { user, token };
+  }
+
+  async loginGoogle(user: User) {
+    return user;
   }
 }

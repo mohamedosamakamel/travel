@@ -20,7 +20,7 @@ export class UsersService {
     @InjectModel(Teacher.name) private teacherModel: Model<Teacher>,
   ) {}
 
-  async create(registerationData: CreateUserDto) {
+  async register(registerationData: CreateUserDto) {
     const prevUser = await this.userModel.findOne({
       phone: registerationData.phone,
     });
@@ -56,5 +56,9 @@ export class UsersService {
 
   async getProfile(me: User) {
     return me;
+  }
+
+  async createUser(createUserData: CreateUserDto) {
+    return await new this.userModel(createUserData).save();
   }
 }

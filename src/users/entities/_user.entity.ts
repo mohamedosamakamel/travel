@@ -34,9 +34,6 @@ export class User {
     unique: true,
     sparse: true,
     match: Constants.EMAIL_REGX,
-    set: (email: string) => {
-      if (email === null) return undefined;
-    },
   })
   email: string;
 
@@ -45,7 +42,6 @@ export class User {
     unique: true,
     sparse: true,
     match: Constants.PHONE_REGX,
-    required: true,
   })
   phone: string;
 
@@ -68,6 +64,12 @@ export class User {
 
   @Prop()
   photo: string;
+
+  @Prop({ index: true, unique: true, sparse: true })
+  facebookId: string;
+
+  @Prop({ index: true, unique: true, sparse: true })
+  googleId: string;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
@@ -79,7 +81,7 @@ const UserSchema = SchemaFactory.createForClass(User);
 UserSchema.pre('save', async function () {
   const user = this;
 
-  let nullableFields = ['phone', 'email', 'apple_id', 'fb_id'];
+  let nullableFields = ['phone', 'email', 'googleId', 'facebookId'];
   for (let i = 0; i < nullableFields.length; i++) {
     if (user.isModified(nullableFields[i])) {
       const value = user[nullableFields[i]];
