@@ -1,6 +1,13 @@
-import { BadRequestException, Injectable, UseFilters } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+  UseFilters,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -51,7 +58,10 @@ export class UsersService {
   }
 
   async update(filter: FilterUserDto, updateUserData: UpdateUserDto) {
-    return await this.userModel.updateOne(filter, updateUserData);
+    let user = await this.userModel.findOne(filter);
+    if (!user) throw new NotFoundException('user not found');
+    await user.set(updateUserData).save();
+    return user;
   }
 
   async getProfile(me: User) {
@@ -60,5 +70,20 @@ export class UsersService {
 
   async createUser(createUserData: CreateUserDto) {
     return await new this.userModel(createUserData).save();
+  }
+
+  async changePassword(
+    { oldPassword, newPassword }: ChangePasswordDto,
+    me: User,
+  ) {
+    if (!(await (me as any).isValidPassword(oldPassword)))
+      throw new UnauthorizedException('password not match');
+
+    return await this.update(
+      { _id: me._id } as FilterUserDto,
+      {
+        password: newPassword,
+      } as UpdateUserDto,
+    );
   }
 }

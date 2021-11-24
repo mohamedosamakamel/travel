@@ -13,11 +13,15 @@ import { PhoneConfirmationService } from './phone-confirmation.service';
 import { CreatePhoneConfirmationDto } from './dto/create-phone-confirmation.dto';
 import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { UsersService } from 'src/users/users.service';
+import { FilterUserDto } from 'src/users/dto/filter-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 
 @Controller('phone-confirmation')
 export class PhoneConfirmationController {
   constructor(
     private readonly phoneConfirmationService: PhoneConfirmationService,
+    private readonly userService: UsersService,
   ) {}
 
   @Public()
@@ -35,6 +39,10 @@ export class PhoneConfirmationController {
   @HttpCode(HttpStatus.OK)
   @Post('verify')
   async verificationCode(@Body() verifyData: VerifyPhoneDto) {
-    return await this.phoneConfirmationService.verificationCode(verifyData);
+    await this.phoneConfirmationService.verificationCode(verifyData);
+    return await this.userService.update(
+      { phone: verifyData.phone } as FilterUserDto,
+      { enabled: true } as UpdateUserDto,
+    );
   }
 }

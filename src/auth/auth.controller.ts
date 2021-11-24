@@ -17,11 +17,17 @@ import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { GoogleOauthGuard } from './guards/googleToken.guard';
 import { REQUEST } from '@nestjs/core';
 import { User } from 'src/users/entities/_user.entity';
+import { CheckCodeToResetDto } from './dto/check-code-to-reset.dto';
+import { UsersService } from 'src/users/users.service';
+import { FilterUserDto } from 'src/users/dto/filter-user.dto';
+import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly usersService: UsersService,
     private readonly phoneConfirmationService: PhoneConfirmationService,
     @Inject(REQUEST) private readonly req: Record<string, unknown>,
   ) {}
@@ -54,5 +60,26 @@ export class AuthController {
   @Post('/login-facebook')
   async loginFacebook(@Body() { accessToken }: LoginFacebookDto) {
     return await this.authService.loginFacebook({ accessToken });
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('/check-code-to-reset')
+  async checkCodeToReset(@Body() { phone, code }: CheckCodeToResetDto) {
+    return await this.phoneConfirmationService.verificationCode({
+      phone,
+      code,
+    });
+  }
+
+  @Public()
+  @HttpCode(HttpStatus.OK)
+  @Post('reset-password')
+  async resetPassword(@Body() { phone, code, password }: ResetPasswordDto) {
+    await this.phoneConfirmationService.verificationCode({ phone, code });
+    return await this.usersService.update(
+      { phone } as FilterUserDto,
+      { password } as UpdateUserDto,
+    );
   }
 }

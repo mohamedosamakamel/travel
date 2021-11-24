@@ -12,6 +12,8 @@ import {
   UploadedFiles,
   ValidationPipe,
   UsePipes,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { request } from 'http';
@@ -21,6 +23,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserRole } from './entities/_user.entity';
 import { UsersService } from './users.service';
 import { REQUEST } from '@nestjs/core';
+import { AuthUser } from 'src/auth/decorators/me.decorator';
+import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 
 @Controller('users')
 export class UsersController {
@@ -54,6 +58,18 @@ export class UsersController {
     return await this.usersService.update(
       { _id: this.req.me } as FilterUserDto,
       updateUserData,
+    );
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post('/change-password')
+  async changePassword(
+    @Body() { oldPassword, newPassword }: ChangePasswordDto,
+    @AuthUser() me: User,
+  ) {
+    return await this.usersService.changePassword(
+      { oldPassword, newPassword },
+      me,
     );
   }
 }
