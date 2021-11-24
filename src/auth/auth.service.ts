@@ -11,6 +11,7 @@ import { LoginFacebookDto } from './dto/login-facebook.dto';
 import axios from 'axios';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
+import { UserNotFoundException } from 'src/users/exceptions/userNotFound.exception';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +28,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { phone } = loginDto;
     let user = await this.userService.findOne({ phone } as FilterUserDto);
-    if (!user) throw new UnauthorizedException('invalid credentials');
+    if (!user) throw new UserNotFoundException()
     if (!(await (user as any).isValidPassword(loginDto.password)))
       throw new UnauthorizedException('invalid credentials');
 

@@ -7,15 +7,15 @@ import { ConfigService } from '@nestjs/config';
 import * as cloudinaryStorage from 'multer-storage-cloudinary';
 import * as cloudinary from 'cloudinary';
 
-(cloudinary as any).config({
-  cloud_name: 'dqfrk92mp',
-  api_key: '253596391863857',
-  api_secret: 'zUSdqm663H7lfMKqdirIGZxu318',
-});
 @Injectable()
 export class UploadCloudinary implements MulterOptionsFactory {
   constructor(private readonly configService: ConfigService) {}
   createMulterOptions(): MulterModuleOptions {
+    (cloudinary as any).config({
+      cloud_name: this.configService.get('cloud_name'),
+      api_key: this.configService.get('api_key'),
+      api_secret: this.configService.get('api_secret'),
+    });
     return {
       storage: cloudinaryStorage({
         cloudinary: cloudinary,

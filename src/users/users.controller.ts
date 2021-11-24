@@ -14,6 +14,7 @@ import {
   UsePipes,
   HttpStatus,
   HttpCode,
+  Query,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { request } from 'http';
@@ -25,6 +26,7 @@ import { UsersService } from './users.service';
 import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
+import { PaginationParams } from 'src/utils/paginationParams';
 
 @Controller('users')
 export class UsersController {
@@ -35,8 +37,8 @@ export class UsersController {
 
   @Roles(UserRole.STUDENT)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  findAll(@Query() paginationOptions: PaginationParams) {
+    return this.usersService.findAll(paginationOptions);
   }
 
   @Get('profile')

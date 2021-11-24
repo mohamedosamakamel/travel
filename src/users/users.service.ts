@@ -6,8 +6,9 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, PaginateModel } from 'mongoose';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
+import { PaginationParams } from 'src/utils/paginationParams';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -38,18 +39,11 @@ export class UsersService {
     return student;
   }
 
-  async findAll() {
-    // await this.userModel.deleteMany();
-    // await new this.teacherModel({
-    //   username: 'Lolo Amr  ',
-    //   email: 'remahTeacdshe@gmail.com',
-    //   password: '123456',
-    //   bio: '1',
-    // }).save();
-    // let users = await this.userModel.findById('6197e004a1142fa049ab941e');
-    // let test = await (users as any).isValidPassword('123456');
-    // console.log(test);
-    let users = await this.userModel.find();
+  async findAll(paginationOptions: PaginationParams) {
+    let users = await (this.userModel as PaginateModel<UserDocument>).paginate(
+      {} as FilterUserDto,
+      paginationOptions,
+    );
     return users;
   }
 
@@ -87,3 +81,14 @@ export class UsersService {
     );
   }
 }
+
+// await this.userModel.deleteMany();
+// await new this.teacherModel({
+//   username: 'Lolo Amr  ',
+//   email: 'remahTeacdshe@gmail.com',
+//   password: '123456',
+//   bio: '1',
+// }).save();
+// let users = await this.userModel.findById('6197e004a1142fa049ab941e');
+// let test = await (users as any).isValidPassword('123456');
+// console.log(test);
