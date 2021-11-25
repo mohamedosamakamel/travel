@@ -27,6 +27,8 @@ import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
+import ParamsWithId from 'src/utils/paramsWithId';
+import { Public } from 'src/auth/decorators/public.decorator';
 
 @Controller('users')
 export class UsersController {
@@ -73,5 +75,11 @@ export class UsersController {
       { oldPassword, newPassword },
       me,
     );
+  }
+
+  @Public()
+  @Get(':id')
+  async fetchUserById(@Param() { id }: ParamsWithId) {
+    return await this.usersService.findOne({ _id: id } as FilterUserDto);
   }
 }

@@ -19,12 +19,13 @@ export class AllExceptionsFilter<T extends HttpException>
      * @description Exception json response
      * @param message
      */
-    const responseMessage = (type, message, statusCode) => {
+    const responseMessage = (type, message, statusCode, errorObject = null) => {
       response.status(statusCode).json({
         statusCode,
         path: request.url,
         errorType: type,
         errorMessage: message,
+        errorObject,
       });
     };
 
@@ -36,13 +37,14 @@ export class AllExceptionsFilter<T extends HttpException>
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     } else {
-      console.log(exception);
+      // console.log(exception);
       responseMessage(
         'Error',
         exception.message,
         exception instanceof HttpException
           ? exception.getStatus()
           : HttpStatus.INTERNAL_SERVER_ERROR,
+        exception,
       );
     }
   }

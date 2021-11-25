@@ -3,6 +3,7 @@ import { Document, Model, ObjectId } from 'mongoose';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '../../utils/constants';
+import { Password } from '../../auth/utils/Password';
 
 export type UserDocument = User & Document;
 
@@ -109,15 +110,19 @@ UserSchema.pre('save', async function () {
     }
   }
   if ((this as UserDocument).password && this.isModified('password')) {
-    (this as UserDocument).password = await hash(
+    // (this as UserDocument).password = await hash(
+    //   (this as UserDocument).password,
+    //   10,
+    // );
+    (this as UserDocument).password = await Password.hash(
       (this as UserDocument).password,
-      10,
-    ); // TODO make in separte class
+    );
   }
 });
 
 UserSchema.methods.isValidPassword = async function (password) {
-  return compare(password, (this as UserDocument).password);
+  // return compare(password, (this as UserDocument).password);
+  return Password.isCorrectPassword(password, (this as UserDocument).password);
 };
 
 export { UserSchema };
