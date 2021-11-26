@@ -8,9 +8,9 @@ import { Password } from '../../auth/utils/Password';
 export type UserDocument = User & Document;
 
 export enum UserRole {
-  ADMIN = 'Admin',
-  STUDENT = 'Student',
-  TEACHER = 'Teacher',
+  ADMIN = 'admin',
+  STUDENT = 'student',
+  TEACHER = 'teacher',
 }
 
 @Schema({
@@ -73,6 +73,9 @@ export class User {
 
   @Prop({ index: true, unique: true, sparse: true })
   googleId: string;
+
+  @Prop({ required: true, type: String, enum: Object.values(UserRole) })
+  role: UserRole;
 }
 
 const UserSchema = SchemaFactory.createForClass(User);

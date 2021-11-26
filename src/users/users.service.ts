@@ -18,14 +18,19 @@ import {
   StudentSchema,
 } from './entities/student.entity';
 import { Teacher } from './entities/teacher.entity';
-import { User, UserDocument, UserSchema } from './entities/_user.entity';
+import {
+  User,
+  UserDocument,
+  UserRole,
+  UserSchema,
+} from './entities/_user.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(Student.name) private studentModel: Model<Student>,
-    @InjectModel(Teacher.name) private teacherModel: Model<Teacher>,
+    @InjectModel(UserRole.STUDENT) private studentModel: Model<Student>,
+    @InjectModel(UserRole.TEACHER) private teacherModel: Model<Teacher>,
   ) {}
 
   async register(registerationData: CreateUserDto) {

@@ -6,7 +6,6 @@ export class CreateUserDto {
   photo?: string;
   googleId?: string;
   facebookId?: string;
-  role?: string;
 }
 
 export default CreateUserDto;
