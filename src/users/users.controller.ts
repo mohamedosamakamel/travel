@@ -21,7 +21,7 @@ import { request } from 'http';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserRole } from './entities/_user.entity';
+import { User, UserRole } from './models/_user.model';
 import { UsersService } from './users.service';
 import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';

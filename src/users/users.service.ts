@@ -16,14 +16,14 @@ import {
   Student,
   StudentDocument,
   StudentSchema,
-} from './entities/student.entity';
-import { Teacher } from './entities/teacher.entity';
+} from './models/student.model';
+import { Teacher } from './models/teacher.model';
 import {
   User,
   UserDocument,
   UserRole,
   UserSchema,
-} from './entities/_user.entity';
+} from './models/_user.model';
 
 @Injectable()
 export class UsersService {

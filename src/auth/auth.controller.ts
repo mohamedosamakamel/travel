@@ -16,7 +16,7 @@ import { LoginGoogleDto } from './dto/login-google.dto';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { GoogleOauthGuard } from './guards/googleToken.guard';
 import { REQUEST } from '@nestjs/core';
-import { User } from 'src/users/entities/_user.entity';
+import { User } from 'src/users/models/_user.model';
 import { CheckCodeToResetDto } from './dto/check-code-to-reset.dto';
 import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';

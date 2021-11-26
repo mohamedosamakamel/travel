@@ -6,7 +6,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as jwt from 'jsonwebtoken';
 import TokenPayload from './interfaces/tokenPayload.interface';
 import { LoginGoogleDto } from './dto/login-google.dto';
-import { User } from 'src/users/entities/_user.entity';
+import { User } from 'src/users/models/_user.model';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import axios from 'axios';
 import CreateUserDto from 'src/users/dto/create-user.dto';
