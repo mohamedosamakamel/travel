@@ -17,12 +17,14 @@ import axios from 'axios';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserNotFoundException } from 'src/users/exceptions/userNotFound.exception';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(registerationData: RegisterDto) {
@@ -73,28 +75,22 @@ export class AuthService {
   }
 
   async verifyUserByTokenFromSocket(token: string) {
-    return jwt.verify(
-      token,
-      this.configService.get<string>('JWT_SECRET'),
-      async (err, decoded) => {
-        if (err) {
-          return false;
-        }
+    try {
+      const decoded: TokenPayload = await this.jwtService.verify(token);
+      if (decoded.userId === undefined) {
+        return false;
+      }
 
-        if (decoded.userId === undefined) {
-          return false;
-        }
+      const user = await this.userService.findOne({
+        _id: decoded.userId,
+      } as FilterUserDto);
 
-        const user = await this.userService.findOne({
-          _id: decoded.userId,
-        } as FilterUserDto);
-        if (!user) return false;
-
-        if (user && user.enabled === false) {
-          return false;
-        }
-        return user;
-      },
-    );
+      if (!user || user.enabled === false) {
+        return false;
+      }
+      return user;
+    } catch (err) {
+      return false;
+    }
   }
 }

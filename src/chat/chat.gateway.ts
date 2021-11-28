@@ -34,7 +34,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
       return;
     }
 
-    const user: UserDocument =
+    const user: UserDocument | false =
       await this.authService.verifyUserByTokenFromSocket(
         client.handshake.headers.authorization.split(' ')[1],
       );

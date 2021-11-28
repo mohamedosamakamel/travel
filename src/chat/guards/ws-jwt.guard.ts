@@ -13,13 +13,15 @@ export class WsJwtGuard implements CanActivate {
     // console.log('from gurad');
     const client: Socket = context.switchToWs().getClient<Socket>();
     const authToken: string = client.handshake.headers.authorization;
-    const user: UserDocument =
+    const user: UserDocument | false =
       await this.authService.verifyUserByTokenFromSocket(
         authToken.split(' ')[1],
       );
     if (user) {
       (context.switchToHttp().getRequest() as RequestWithUser).me = user;
       return true;
-    } else throw new WsException('invalid credentials');
+    } else {
+      client.disconnect();
+    }
   }
 }

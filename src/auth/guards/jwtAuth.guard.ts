@@ -4,23 +4,24 @@ import {
   HttpException,
   HttpStatus,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
-import * as jwt from 'jsonwebtoken';
 import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
+import { JwtService } from '@nestjs/jwt';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
+import TokenPayload from '../interfaces/tokenPayload.interface';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly userService: UsersService,
+    private readonly jwtService: JwtService,
   ) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     let token = null;
     const isPublic = this.reflector.get(IS_PUBLIC_KEY, context.getHandler());
     const request: RequestWithUser = context.switchToHttp().getRequest();
@@ -31,59 +32,39 @@ export class JwtAuthGuard implements CanActivate {
     } else {
       if (!request.header('authorization')) return false;
     }
-    return checkJWT(token, request, this.userService);
-  }
-}
-
-const checkJWT = async (
-  token,
-  request: RequestWithUser,
-  userService: UsersService,
-) => {
-  return jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-    if (err) {
-      if (err.name) {
-        if (err.name === 'JsonWebTokenError') {
-          throw new HttpException(
-            'Invalid access token.',
-            HttpStatus.UNAUTHORIZED,
-          );
-        } else if (err.name === 'TokenExpiredError') {
-          throw new HttpException(
-            'Expired access token, please login again.',
-            HttpStatus.UNAUTHORIZED,
-          );
-        }
+    try {
+      const decoded: TokenPayload = await this.jwtService.verify(token);
+      if (decoded.userId === undefined) {
+        throw new HttpException(
+          'Invalid access token.',
+          HttpStatus.UNAUTHORIZED,
+        );
       }
-      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
-    if (decoded.userId === undefined) {
-      throw new HttpException('Invalid access token.', HttpStatus.UNAUTHORIZED);
-    }
+      const user = await this.userService.findOne({
+        _id: decoded.userId,
+      } as FilterUserDto);
+      if (!user) return false;
 
-    const user = await userService.findOne({
-      _id: decoded.userId,
-    } as FilterUserDto);
-    if (!user) return false;
+      if (
+        request.path.split('/')[3] === 'change-profile-unauthorized' ||
+        request.path.split('/')[3] === 'merge-accounts'
+      ) {
+        request.me = user;
+        return true;
+      }
 
-    if (
-      user &&
-      (request.path.split('/')[3] === 'change-profile-unauthorized' ||
-        request.path.split('/')[3] === 'merge-accounts')
-    ) {
+      if (user && user.enabled === false) {
+        throw new HttpException(
+          'Your account is disabled',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
       request.me = user;
       return true;
+    } catch (err) {
+      throw new UnauthorizedException(err);
     }
-
-    if (user && user.enabled === false) {
-      throw new HttpException(
-        'Your account is disabled',
-        HttpStatus.UNAUTHORIZED,
-      );
-    }
-
-    request.me = user;
-    return true;
-  });
-};
+  }
+}
