@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { PhoneConfirmationModule } from './phone-confirmation/phone-confirmation.module';
 import { DatabaseModule } from './database.module';
-
+import { ChatModule } from './chat/chat.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -14,6 +14,7 @@ import { DatabaseModule } from './database.module';
     UsersModule,
     AuthModule,
     PhoneConfirmationModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],

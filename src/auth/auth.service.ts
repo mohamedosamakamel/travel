@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
@@ -28,7 +33,7 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { phone } = loginDto;
     let user = await this.userService.findOne({ phone } as FilterUserDto);
-    if (!user) throw new UserNotFoundException()
+    if (!user) throw new UserNotFoundException();
     if (!(await (user as any).isValidPassword(loginDto.password)))
       throw new UnauthorizedException('invalid credentials');
 
@@ -67,5 +72,29 @@ export class AuthService {
     return user;
   }
 
-  
+  async verifyUserByTokenFromSocket(token: string) {
+    return jwt.verify(
+      token,
+      this.configService.get<string>('JWT_SECRET'),
+      async (err, decoded) => {
+        if (err) {
+          return false;
+        }
+
+        if (decoded.userId === undefined) {
+          return false;
+        }
+
+        const user = await this.userService.findOne({
+          _id: decoded.userId,
+        } as FilterUserDto);
+        if (!user) return false;
+
+        if (user && user.enabled === false) {
+          return false;
+        }
+        return user;
+      },
+    );
+  }
 }

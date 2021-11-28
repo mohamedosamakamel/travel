@@ -7,7 +7,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ApiKeyGuard } from './guards/api-key.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { GoogleOauthStrategy } from './strategies/googleStrategy.passport';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [UsersModule, PhoneConfirmationModule, ConfigModule],
@@ -18,5 +18,6 @@ import { ConfigModule } from '@nestjs/config';
     { provide: APP_GUARD, useClass: ApiKeyGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}
