@@ -13,7 +13,7 @@ import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
 @Injectable()
-export class ApiKeyGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
     private readonly userService: UsersService,
