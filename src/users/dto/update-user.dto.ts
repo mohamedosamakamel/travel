@@ -3,7 +3,7 @@ import { IsBoolean, IsMongoId, IsOptional, IsString } from 'class-validator';
 export class UpdateUserDto {
   @IsBoolean()
   @IsOptional()
-  enabled?: Boolean;
+  enabled?: boolean;
 
   @IsString()
   @IsOptional()
