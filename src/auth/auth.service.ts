@@ -33,7 +33,10 @@ export class AuthService {
     return user;
   }
 
-  async login(loginDto: LoginDto): Promise<any> {
+  async login(loginDto: LoginDto): Promise<{
+    user: UserDocument;
+    token: string;
+  }> {
     const { phone } = loginDto;
     let user = await this.userService.findOne({ phone } as FilterUserDto);
     if (!user) throw new UserNotFoundException();
