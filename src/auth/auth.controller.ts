@@ -16,12 +16,13 @@ import { LoginGoogleDto } from './dto/login-google.dto';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import { GoogleOauthGuard } from './guards/googleToken.guard';
 import { REQUEST } from '@nestjs/core';
-import { User } from 'src/users/models/_user.model';
+import { User, UserDocument } from 'src/users/models/_user.model';
 import { CheckCodeToResetDto } from './dto/check-code-to-reset.dto';
 import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { StudentDocument } from 'src/users/models/student.model';
 
 @Controller('auth')
 export class AuthController {
@@ -34,7 +35,7 @@ export class AuthController {
 
   @Public()
   @Post('/signup')
-  async register(@Body() RegisterDto: RegisterDto) {
+  async register(@Body() RegisterDto: RegisterDto): Promise<StudentDocument> {
     let user = await this.authService.register(RegisterDto);
     await this.phoneConfirmationService.sendSMS({
       phone: RegisterDto.phone,
@@ -45,27 +46,33 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('/login')
-  async login(@Body() LoginDto: LoginDto) {
+  async login(@Body() LoginDto: LoginDto): Promise<any> {
     return await this.authService.login(LoginDto);
   }
 
   @Public()
   @UseGuards(GoogleOauthGuard)
   @Post('/login-googel')
-  async loginGoogle(@Body() _loginGoogleData: LoginGoogleDto) {
-    return await this.authService.loginGoogle(this.req.me as User);
+  async loginGoogle(
+    @Body() _loginGoogleData: LoginGoogleDto,
+  ): Promise<UserDocument> {
+    return await this.authService.loginGoogle(this.req.me as UserDocument);
   }
 
   @Public()
   @Post('/login-facebook')
-  async loginFacebook(@Body() { accessToken }: LoginFacebookDto) {
+  async loginFacebook(
+    @Body() { accessToken }: LoginFacebookDto,
+  ): Promise<UserDocument> {
     return await this.authService.loginFacebook({ accessToken });
   }
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('/check-code-to-reset')
-  async checkCodeToReset(@Body() { phone, code }: CheckCodeToResetDto) {
+  async checkCodeToReset(
+    @Body() { phone, code }: CheckCodeToResetDto,
+  ): Promise<void> {
     return await this.phoneConfirmationService.verificationCode({
       phone,
       code,
@@ -75,7 +82,9 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('reset-password')
-  async resetPassword(@Body() { phone, code, password }: ResetPasswordDto) {
+  async resetPassword(
+    @Body() { phone, code, password }: ResetPasswordDto,
+  ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode({ phone, code });
     return await this.usersService.update(
       { phone } as FilterUserDto,

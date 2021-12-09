@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreatePhoneConfirmationDto } from './dto/create-phone-confirmation.dto';
 import { InjectTwilio, TwilioClient } from 'nestjs-twilio';
 import { VerifyPhoneDto } from './dto/verify-phone.dto';
+import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verification';
 
 @Injectable()
 export class PhoneConfirmationService {
@@ -10,7 +11,9 @@ export class PhoneConfirmationService {
     private twilioClient: TwilioClient,
   ) {}
 
-  async sendSMS(createPhoneConfirmationDto: CreatePhoneConfirmationDto) {
+  async sendSMS(
+    createPhoneConfirmationDto: CreatePhoneConfirmationDto,
+  ): Promise<VerificationInstance> {
     try {
       return await this.twilioClient.verify
         .services(process.env.TWILIO_ACCOUNT_VERIFY_SID)
@@ -23,7 +26,7 @@ export class PhoneConfirmationService {
     }
   }
 
-  async verificationCode(verifyData: VerifyPhoneDto) {
+  async verificationCode(verifyData: VerifyPhoneDto): Promise<void> {
     try {
       let verificationResult = await this.twilioClient.verify
         .services(process.env.TWILIO_ACCOUNT_VERIFY_SID)

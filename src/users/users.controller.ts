@@ -21,7 +21,7 @@ import { request } from 'http';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserRole } from './models/_user.model';
+import { User, UserDocument, UserRole } from './models/_user.model';
 import { UsersService } from './users.service';
 import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
@@ -29,6 +29,7 @@ import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
 import ParamsWithId from 'src/utils/paramsWithId';
 import { Public } from 'src/auth/decorators/public.decorator';
+import { PaginateResult } from 'mongoose';
 
 @Controller('users')
 export class UsersController {
@@ -39,13 +40,15 @@ export class UsersController {
 
   @Roles(UserRole.STUDENT)
   @Get()
-  findAll(@Query() paginationOptions: PaginationParams) {
-    return this.usersService.findAll(paginationOptions);
+  async findAll(
+    @Query() paginationOptions: PaginationParams,
+  ): Promise<PaginateResult<UserDocument>> {
+    return await this.usersService.findAll(paginationOptions);
   }
 
   @Get('profile')
-  async getProfile() {
-    return await this.usersService.getProfile(this.req.me as User);
+  async getProfile(): Promise<UserDocument> {
+    return await this.usersService.getProfile(this.req.me as UserDocument);
   }
 
   @Patch('profile')
@@ -54,7 +57,7 @@ export class UsersController {
     @UploadedFiles()
     files,
     @Body() updateUserData: UpdateUserDto,
-  ) {
+  ): Promise<UserDocument> {
     if (files && files.photo) updateUserData.photo = files.photo[0].secure_url;
 
     delete updateUserData.enabled;
@@ -69,8 +72,8 @@ export class UsersController {
   @Post('/change-password')
   async changePassword(
     @Body() { oldPassword, newPassword }: ChangePasswordDto,
-    @AuthUser() me: User,
-  ) {
+    @AuthUser() me: UserDocument,
+  ): Promise<UserDocument> {
     return await this.usersService.changePassword(
       { oldPassword, newPassword },
       me,
@@ -79,7 +82,7 @@ export class UsersController {
 
   @Public()
   @Get(':id')
-  async fetchUserById(@Param() { id }: ParamsWithId) {
+  async fetchUserById(@Param() { id }: ParamsWithId): Promise<UserDocument> {
     return await this.usersService.findOne({ _id: id } as FilterUserDto);
   }
 }

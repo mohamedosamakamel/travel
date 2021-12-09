@@ -6,7 +6,7 @@ import {
   UseFilters,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel } from 'mongoose';
+import { Model, PaginateModel, PaginateResult } from 'mongoose';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -18,12 +18,7 @@ import {
   StudentSchema,
 } from './models/student.model';
 import { Teacher } from './models/teacher.model';
-import {
-  User,
-  UserDocument,
-  UserRole,
-  UserSchema,
-} from './models/_user.model';
+import { User, UserDocument, UserRole, UserSchema } from './models/_user.model';
 
 @Injectable()
 export class UsersService {
@@ -33,18 +28,18 @@ export class UsersService {
     @InjectModel(UserRole.TEACHER) private teacherModel: Model<Teacher>,
   ) {}
 
-  async register(registerationData: CreateUserDto) {
+  async register(registerationData: CreateUserDto): Promise<StudentDocument> {
     const prevUser = await this.userModel.findOne({
       phone: registerationData.phone,
     });
     if (prevUser) throw new BadRequestException('phone should be unique');
-    let student: StudentDocument = await new this.studentModel(
-      registerationData,
-    ).save();
+    let student = await new this.studentModel(registerationData).save();
     return student;
   }
 
-  async findAll(paginationOptions: PaginationParams) {
+  async findAll(
+    paginationOptions: PaginationParams,
+  ): Promise<PaginateResult<UserDocument>> {
     let users = await (this.userModel as PaginateModel<UserDocument>).paginate(
       {} as FilterUserDto,
       paginationOptions,
@@ -52,29 +47,32 @@ export class UsersService {
     return users;
   }
 
-  async findOne(filter: FilterUserDto) {
+  async findOne(filter: FilterUserDto): Promise<UserDocument> {
     return await this.userModel.findOne(filter);
   }
 
-  async update(filter: FilterUserDto, updateUserData: UpdateUserDto) {
+  async update(
+    filter: FilterUserDto,
+    updateUserData: UpdateUserDto,
+  ): Promise<UserDocument> {
     let user = await this.userModel.findOne(filter);
     if (!user) throw new NotFoundException('user not found');
     await user.set(updateUserData).save();
     return user;
   }
 
-  async getProfile(me: User) {
+  async getProfile(me: UserDocument): Promise<UserDocument> {
     return me;
   }
 
-  async createUser(createUserData: CreateUserDto) {
+  async createUser(createUserData: CreateUserDto): Promise<UserDocument> {
     return await new this.userModel(createUserData).save();
   }
 
   async changePassword(
     { oldPassword, newPassword }: ChangePasswordDto,
-    me: User,
-  ) {
+    me: UserDocument,
+  ): Promise<UserDocument> {
     if (!(await (me as any).isValidPassword(oldPassword)))
       throw new UnauthorizedException('password not match');
 

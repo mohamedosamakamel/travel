@@ -16,6 +16,8 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { UsersService } from 'src/users/users.service';
 import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
+import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verification';
+import { UserDocument } from 'src/users/models/_user.model';
 
 @Controller('phone-confirmation')
 export class PhoneConfirmationController {
@@ -29,7 +31,7 @@ export class PhoneConfirmationController {
   @Post()
   async sendSMS(
     @Body() createPhoneConfirmationDto: CreatePhoneConfirmationDto,
-  ) {
+  ): Promise<VerificationInstance> {
     return await this.phoneConfirmationService.sendSMS(
       createPhoneConfirmationDto,
     );
@@ -38,7 +40,9 @@ export class PhoneConfirmationController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('verify')
-  async verificationCode(@Body() verifyData: VerifyPhoneDto) {
+  async verificationCode(
+    @Body() verifyData: VerifyPhoneDto,
+  ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode(verifyData);
     return await this.userService.update(
       { phone: verifyData.phone } as FilterUserDto,

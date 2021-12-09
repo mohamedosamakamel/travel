@@ -11,13 +11,14 @@ import { RegisterDto } from './dto/register.dto';
 import * as jwt from 'jsonwebtoken';
 import TokenPayload from './interfaces/tokenPayload.interface';
 import { LoginGoogleDto } from './dto/login-google.dto';
-import { User } from 'src/users/models/_user.model';
+import { User, UserDocument } from 'src/users/models/_user.model';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import axios from 'axios';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserNotFoundException } from 'src/users/exceptions/userNotFound.exception';
 import { JwtService } from '@nestjs/jwt';
+import { StudentDocument } from 'src/users/models/student.model';
 
 @Injectable()
 export class AuthService {
@@ -27,12 +28,12 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(registerationData: RegisterDto) {
+  async register(registerationData: RegisterDto): Promise<StudentDocument> {
     let user = await this.userService.register(registerationData);
     return user;
   }
 
-  async login(loginDto: LoginDto) {
+  async login(loginDto: LoginDto): Promise<any> {
     const { phone } = loginDto;
     let user = await this.userService.findOne({ phone } as FilterUserDto);
     if (!user) throw new UserNotFoundException();
@@ -49,11 +50,13 @@ export class AuthService {
     return { user, token };
   }
 
-  async loginGoogle(user: User) {
+  async loginGoogle(user: UserDocument): Promise<UserDocument> {
     return user;
   }
 
-  async loginFacebook({ accessToken }: LoginFacebookDto) {
+  async loginFacebook({
+    accessToken,
+  }: LoginFacebookDto): Promise<UserDocument> {
     const { data } = await axios(
       `${this.configService.get<string>(
         'facebookUrl',
@@ -68,13 +71,15 @@ export class AuthService {
         username: name,
         email,
         facebookId: id,
-        role: 'Student',
+        role: 'student',
       } as CreateUserDto);
     }
     return user;
   }
 
-  async verifyUserByTokenFromSocket(token: string) {
+  async verifyUserByTokenFromSocket(
+    token: string,
+  ): Promise<false | UserDocument> {
     try {
       const decoded: TokenPayload = await this.jwtService.verify(token);
       if (decoded.userId === undefined) {
