@@ -4,13 +4,13 @@ import {
   NotFoundException,
   UnauthorizedException,
   UseFilters,
+  ValidationPipe,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, PaginateModel, PaginateResult } from 'mongoose';
+import { FilterQuery, Model, PaginateModel, PaginateResult } from 'mongoose';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
 import { CreateUserDto } from './dto/create-user.dto';
-import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   Student,
@@ -41,18 +41,20 @@ export class UsersService {
     paginationOptions: PaginationParams,
   ): Promise<PaginateResult<UserDocument>> {
     let users = await (this.userModel as PaginateModel<UserDocument>).paginate(
-      {} as FilterUserDto,
+      {} as FilterQuery<UserDocument>,
       paginationOptions,
     );
     return users;
   }
 
-  async findOne(filter: FilterUserDto): Promise<UserDocument> {
-    return await this.userModel.findOne(filter);
+  async findOne(filter: FilterQuery<UserDocument>): Promise<UserDocument> {
+    const user = await this.userModel.findOne(filter);
+    if (!user) throw new NotFoundException('user not found');
+    return user;
   }
 
   async update(
-    filter: FilterUserDto,
+    filter: FilterQuery<UserDocument>,
     updateUserData: UpdateUserDto,
   ): Promise<UserDocument> {
     let user = await this.userModel.findOne(filter);
@@ -77,7 +79,7 @@ export class UsersService {
       throw new UnauthorizedException('password not match');
 
     return await this.update(
-      { _id: me._id } as FilterUserDto,
+      { _id: me._id } as FilterQuery<UserDocument>,
       {
         password: newPassword,
       } as UpdateUserDto,

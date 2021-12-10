@@ -19,10 +19,10 @@ import { REQUEST } from '@nestjs/core';
 import { User, UserDocument } from 'src/users/models/_user.model';
 import { CheckCodeToResetDto } from './dto/check-code-to-reset.dto';
 import { UsersService } from 'src/users/users.service';
-import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { StudentDocument } from 'src/users/models/student.model';
+import { FilterQuery } from 'mongoose';
 
 @Controller('auth')
 export class AuthController {
@@ -90,7 +90,7 @@ export class AuthController {
   ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode({ phone, code });
     return await this.usersService.update(
-      { phone } as FilterUserDto,
+      { phone } as FilterQuery<UserDocument>,
       { password } as UpdateUserDto,
     );
   }

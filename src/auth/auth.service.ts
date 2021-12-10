@@ -4,7 +4,6 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -19,6 +18,7 @@ import { ConfigService } from '@nestjs/config';
 import { UserNotFoundException } from 'src/users/exceptions/userNotFound.exception';
 import { JwtService } from '@nestjs/jwt';
 import { StudentDocument } from 'src/users/models/student.model';
+import { FilterQuery } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +38,7 @@ export class AuthService {
     token: string;
   }> {
     const { phone } = loginDto;
-    let user = await this.userService.findOne({ phone } as FilterUserDto);
+    let user = await this.userService.findOne({ phone } as FilterQuery<UserDocument>);
     if (!user) throw new UserNotFoundException();
     if (!(await (user as any).isValidPassword(loginDto.password)))
       throw new UnauthorizedException('invalid credentials');
@@ -68,7 +68,7 @@ export class AuthService {
     const { id, name, email } = data;
     let user = await this.userService.findOne({
       facebookId: id,
-    } as FilterUserDto);
+    } as FilterQuery<UserDocument>);
     if (!user) {
       user = await this.userService.createUser({
         username: name,
@@ -91,7 +91,7 @@ export class AuthService {
 
       const user = await this.userService.findOne({
         _id: decoded.userId,
-      } as FilterUserDto);
+      } as FilterQuery<UserDocument>);
 
       if (!user || user.enabled === false) {
         return false;

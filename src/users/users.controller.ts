@@ -19,7 +19,6 @@ import {
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { request } from 'http';
 import { Roles } from 'src/auth/decorators/roles.decorator';
-import { FilterUserDto } from './dto/filter-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument, UserRole } from './models/_user.model';
 import { UsersService } from './users.service';
@@ -29,7 +28,7 @@ import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
 import ParamsWithId from 'src/utils/paramsWithId';
 import { Public } from 'src/auth/decorators/public.decorator';
-import { PaginateResult } from 'mongoose';
+import { FilterQuery, PaginateResult } from 'mongoose';
 
 @Controller('users')
 export class UsersController {
@@ -63,7 +62,7 @@ export class UsersController {
     delete updateUserData.enabled;
 
     return await this.usersService.update(
-      { _id: this.req.me } as FilterUserDto,
+      { _id: this.req.me } as FilterQuery<UserDocument>,
       updateUserData,
     );
   }
@@ -83,6 +82,8 @@ export class UsersController {
   @Public()
   @Get(':id')
   async fetchUserById(@Param() { id }: ParamsWithId): Promise<UserDocument> {
-    return await this.usersService.findOne({ _id: id } as FilterUserDto);
+    return await this.usersService.findOne({
+      _id: id,
+    } as FilterQuery<UserDocument>);
   }
 }

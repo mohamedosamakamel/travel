@@ -2,9 +2,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-token';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import CreateUserDto from 'src/users/dto/create-user.dto';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
+import { FilterQuery } from 'mongoose';
+import { UserDocument } from 'src/users/models/_user.model';
 
 @Injectable()
 export class GoogleOauthStrategy extends PassportStrategy(Strategy, 'google') {
@@ -26,7 +27,7 @@ export class GoogleOauthStrategy extends PassportStrategy(Strategy, 'google') {
     const { id, displayName, emails, _json } = profile;
     let user = await this.usersService.findOne({
       googleId: id,
-    } as FilterUserDto);
+    } as FilterQuery<UserDocument>);
     if (!user) {
       user = await this.usersService.createUser({
         username: displayName,

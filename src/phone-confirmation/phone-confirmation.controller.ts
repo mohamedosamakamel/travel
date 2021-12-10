@@ -14,10 +14,10 @@ import { CreatePhoneConfirmationDto } from './dto/create-phone-confirmation.dto'
 import { VerifyPhoneDto } from './dto/verify-phone.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { UsersService } from 'src/users/users.service';
-import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verification';
 import { UserDocument } from 'src/users/models/_user.model';
+import { FilterQuery } from 'mongoose';
 
 @Controller('phone-confirmation')
 export class PhoneConfirmationController {
@@ -45,7 +45,7 @@ export class PhoneConfirmationController {
   ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode(verifyData);
     return await this.userService.update(
-      { phone: verifyData.phone } as FilterUserDto,
+      { phone: verifyData.phone } as FilterQuery<UserDocument>,
       { enabled: true } as UpdateUserDto,
     );
   }

@@ -10,10 +10,11 @@ import { Reflector } from '@nestjs/core';
 import { Observable } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { UsersService } from 'src/users/users.service';
-import { FilterUserDto } from 'src/users/dto/filter-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
 import TokenPayload from '../interfaces/tokenPayload.interface';
+import { FilterQuery } from 'mongoose';
+import { UserDocument } from 'src/users/models/_user.model';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
@@ -43,7 +44,7 @@ export class JwtAuthGuard implements CanActivate {
 
       const user = await this.userService.findOne({
         _id: decoded.userId,
-      } as FilterUserDto);
+      } as FilterQuery<UserDocument>);
       if (!user) return false;
 
       if (
