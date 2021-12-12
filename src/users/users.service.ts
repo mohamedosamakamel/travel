@@ -7,10 +7,16 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { FilterQuery, Model, PaginateModel, PaginateResult } from 'mongoose';
+import {
+  CreateQuery,
+  FilterQuery,
+  Model,
+  PaginateModel,
+  PaginateResult,
+} from 'mongoose';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/paginationParams';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   Student,
@@ -28,15 +34,6 @@ export class UsersService {
     @InjectModel(UserRole.TEACHER) private teacherModel: Model<Teacher>,
   ) {}
 
-  async register(registerationData: CreateUserDto): Promise<StudentDocument> {
-    const prevUser = await this.userModel.findOne({
-      phone: registerationData.phone,
-    });
-    if (prevUser) throw new BadRequestException('phone should be unique');
-    let student = await new this.studentModel(registerationData).save();
-    return student;
-  }
-
   async findAll(
     paginationOptions: PaginationParams,
   ): Promise<PaginateResult<UserDocument>> {
@@ -49,7 +46,6 @@ export class UsersService {
 
   async findOne(filter: FilterQuery<UserDocument>): Promise<UserDocument> {
     const user = await this.userModel.findOne(filter);
-    if (!user) throw new NotFoundException('user not found');
     return user;
   }
 
@@ -67,7 +63,7 @@ export class UsersService {
     return me;
   }
 
-  async createUser(createUserData: CreateUserDto): Promise<UserDocument> {
+  async createUser(createUserData: CreateQuery<User>): Promise<UserDocument> {
     return await new this.userModel(createUserData).save();
   }
 

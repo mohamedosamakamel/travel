@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
 import TokenPayload from '../interfaces/tokenPayload.interface';
 import { FilterQuery } from 'mongoose';
-import { UserDocument } from 'src/users/models/_user.model';
+import { User, UserDocument } from 'src/users/models/_user.model';
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(

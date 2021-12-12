@@ -2,10 +2,9 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-google-token';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
-import CreateUserDto from 'src/users/dto/create-user.dto';
 import RequestWithUser from '../interfaces/requestWithIUser.interface';
-import { FilterQuery } from 'mongoose';
-import { UserDocument } from 'src/users/models/_user.model';
+import { CreateQuery, FilterQuery } from 'mongoose';
+import { User, UserDocument } from 'src/users/models/_user.model';
 
 @Injectable()
 export class GoogleOauthStrategy extends PassportStrategy(Strategy, 'google') {
@@ -35,7 +34,7 @@ export class GoogleOauthStrategy extends PassportStrategy(Strategy, 'google') {
         photo: _json.picture,
         googleId: id,
         role: 'student',
-      } as CreateUserDto);
+      } as CreateQuery<User>);
     }
     req.me = user;
     done(null, req.me);

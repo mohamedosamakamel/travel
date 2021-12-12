@@ -16,7 +16,7 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { UsersService } from 'src/users/users.service';
 import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verification';
-import { UserDocument } from 'src/users/models/_user.model';
+import { User, UserDocument } from 'src/users/models/_user.model';
 import { FilterQuery } from 'mongoose';
 
 @Controller('phone-confirmation')

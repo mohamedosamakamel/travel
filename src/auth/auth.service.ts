@@ -3,6 +3,7 @@ import {
   UnauthorizedException,
   HttpException,
   HttpStatus,
+  BadRequestException,
 } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { LoginDto } from './dto/login.dto';
@@ -13,12 +14,11 @@ import { LoginGoogleDto } from './dto/login-google.dto';
 import { User, UserDocument } from 'src/users/models/_user.model';
 import { LoginFacebookDto } from './dto/login-facebook.dto';
 import axios from 'axios';
-import CreateUserDto from 'src/users/dto/create-user.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserNotFoundException } from 'src/users/exceptions/userNotFound.exception';
 import { JwtService } from '@nestjs/jwt';
 import { StudentDocument } from 'src/users/models/student.model';
-import { FilterQuery } from 'mongoose';
+import { CreateQuery, FilterQuery } from 'mongoose';
 
 @Injectable()
 export class AuthService {
@@ -29,7 +29,13 @@ export class AuthService {
   ) {}
 
   async register(registerationData: RegisterDto): Promise<StudentDocument> {
-    let user = await this.userService.register(registerationData);
+    let user = await this.userService.findOne({
+      phone: registerationData.phone,
+    } as FilterQuery<UserDocument>);
+    if (user) throw new BadRequestException('phone should be unique');
+    user = await this.userService.createUser(
+      registerationData as CreateQuery<User>,
+    );
     return user;
   }
 
@@ -38,7 +44,9 @@ export class AuthService {
     token: string;
   }> {
     const { phone } = loginDto;
-    let user = await this.userService.findOne({ phone } as FilterQuery<UserDocument>);
+    let user = await this.userService.findOne({
+      phone,
+    } as FilterQuery<UserDocument>);
     if (!user) throw new UserNotFoundException();
     if (!(await (user as any).isValidPassword(loginDto.password)))
       throw new UnauthorizedException('invalid credentials');
@@ -75,7 +83,7 @@ export class AuthService {
         email,
         facebookId: id,
         role: 'student',
-      } as CreateUserDto);
+      } as CreateQuery<User>);
     }
     return user;
   }
