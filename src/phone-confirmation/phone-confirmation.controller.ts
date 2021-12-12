@@ -18,7 +18,10 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verification';
 import { User, UserDocument } from 'src/users/models/_user.model';
 import { FilterQuery } from 'mongoose';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('PHONE-CONFIRMATION')
 @Controller('phone-confirmation')
 export class PhoneConfirmationController {
   constructor(

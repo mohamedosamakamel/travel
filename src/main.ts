@@ -4,6 +4,15 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './utils/filters/http-exception.filter';
 import * as helmet from 'helmet';
 import * as logger from 'morgan';
+import {
+  DocumentBuilder,
+  SwaggerCustomOptions,
+  SwaggerModule,
+} from '@nestjs/swagger';
+import { PaginationParams } from './utils/pagination/paginationParams.dto';
+import { PaginatedDto } from './utils/pagination/paginated.dto';
+import { User } from './users/models/_user.model';
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(logger('dev'));
@@ -20,6 +29,22 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new AllExceptionsFilter());
-  await app.listen(3000);
+  // swagger config
+  const options = new DocumentBuilder()
+    .setTitle('NEST STRUCTURE')
+    .setDescription('The Nest.js structure API description')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+  const customOptions: SwaggerCustomOptions = {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  };
+  const document = SwaggerModule.createDocument(app, options, {
+    extraModels: [PaginatedDto, PaginationParams, User],
+  });
+  SwaggerModule.setup('api', app, document, customOptions);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

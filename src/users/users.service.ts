@@ -16,7 +16,7 @@ import {
 } from 'mongoose';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
-import { PaginationParams } from 'src/utils/paginationParams';
+import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   Student,

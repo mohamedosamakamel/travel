@@ -25,11 +25,15 @@ import { UsersService } from './users.service';
 import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
-import { PaginationParams } from 'src/utils/paginationParams';
+import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
 import ParamsWithId from 'src/utils/paramsWithId';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { FilterQuery, PaginateResult } from 'mongoose';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { ApiPaginatedResponse } from 'src/utils/pagination/apiPaginatedResponse';
 
+@ApiBearerAuth()
+@ApiTags('USERS')
 @Controller('users')
 export class UsersController {
   constructor(
@@ -38,6 +42,7 @@ export class UsersController {
   ) {}
 
   @Roles(UserRole.STUDENT)
+  @ApiPaginatedResponse(User)
   @Get()
   async findAll(
     @Query() paginationOptions: PaginationParams,
@@ -52,6 +57,7 @@ export class UsersController {
 
   @Patch('profile')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'photo', maxCount: 1 }]))
+  @ApiConsumes('multipart/form-data')
   async updateProfile(
     @UploadedFiles()
     files,

@@ -23,7 +23,10 @@ import { UpdateUserDto } from 'src/users/dto/update-user.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { StudentDocument } from 'src/users/models/student.model';
 import { FilterQuery } from 'mongoose';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
+@ApiTags('AUTH')
 @Controller('auth')
 export class AuthController {
   constructor(
