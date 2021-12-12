@@ -36,7 +36,7 @@ export class AuthService {
     user = await this.userService.createUser({
       ...registerationData,
       role: 'student',
-    } as CreateQuery<User>);
+    } as CreateQuery<UserDocument>);
     return user;
   }
 
@@ -84,7 +84,7 @@ export class AuthService {
         email,
         facebookId: id,
         role: 'student',
-      } as CreateQuery<User>);
+      } as CreateQuery<UserDocument>);
     }
     return user;
   }

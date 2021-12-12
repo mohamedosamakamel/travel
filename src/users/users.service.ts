@@ -23,15 +23,15 @@ import {
   StudentDocument,
   StudentSchema,
 } from './models/student.model';
-import { Teacher } from './models/teacher.model';
+import { Teacher, TeacherDocument } from './models/teacher.model';
 import { User, UserDocument, UserRole, UserSchema } from './models/_user.model';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(UserRole.STUDENT) private studentModel: Model<Student>,
-    @InjectModel(UserRole.TEACHER) private teacherModel: Model<Teacher>,
+    @InjectModel(UserRole.STUDENT) private studentModel: Model<StudentDocument>,
+    @InjectModel(UserRole.TEACHER) private teacherModel: Model<TeacherDocument>,
   ) {}
 
   async findAll(
@@ -63,7 +63,9 @@ export class UsersService {
     return me;
   }
 
-  async createUser(createUserData: CreateQuery<User>): Promise<UserDocument> {
+  async createUser(
+    createUserData: CreateQuery<UserDocument>,
+  ): Promise<UserDocument> {
     return await new this.userModel(createUserData).save();
   }
 
