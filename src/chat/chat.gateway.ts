@@ -50,7 +50,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @UseGuards(WsJwtGuard)
   @UseFilters(new WebsocketsExceptionFilter())
   @SubscribeMessage('test-listen')
-  async testListen(@MessageBody() data: any, @AuthUser() me: User) {
+  async testListen(@MessageBody() data: any, @AuthUser() me: UserDocument) {
     console.log(data, me.role);
     // throw new WsException('test exception event'); // Nest will handle the thrown exception and emit the exception message
     this.server.to(`user_${me._id}`).emit('test-emit', { msg: 'successful' });
