@@ -44,7 +44,7 @@ export class UsersController {
   ) {}
 
   @Roles(UserRole.STUDENT)
-  @ApiPaginatedResponse(User, Teacher)
+  @ApiPaginatedResponse(User)
   @Get()
   async findAll(
     @Query() paginationOptions: PaginationParams,

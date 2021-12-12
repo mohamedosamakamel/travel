@@ -44,7 +44,7 @@ async function bootstrap() {
     },
   };
   const document = SwaggerModule.createDocument(app, options, {
-    extraModels: [PaginatedDto, PaginationParams, User, Teacher],
+    extraModels: [PaginatedDto, PaginationParams, User],
   });
   SwaggerModule.setup('api', app, document, customOptions);
   await app.listen(process.env.PORT || 3000);
