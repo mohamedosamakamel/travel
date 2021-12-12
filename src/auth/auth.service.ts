@@ -33,9 +33,10 @@ export class AuthService {
       phone: registerationData.phone,
     } as FilterQuery<UserDocument>);
     if (user) throw new BadRequestException('phone should be unique');
-    user = await this.userService.createUser(
-      registerationData as CreateQuery<User>,
-    );
+    user = await this.userService.createUser({
+      ...registerationData,
+      role: 'student',
+    } as CreateQuery<User>);
     return user;
   }
 
