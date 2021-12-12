@@ -12,6 +12,8 @@ import {
 import { PaginationParams } from './utils/pagination/paginationParams.dto';
 import { PaginatedDto } from './utils/pagination/paginated.dto';
 import { User } from './users/models/_user.model';
+import { Student } from './users/models/student.model';
+import { Teacher } from './users/models/teacher.model';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -42,7 +44,7 @@ async function bootstrap() {
     },
   };
   const document = SwaggerModule.createDocument(app, options, {
-    extraModels: [PaginatedDto, PaginationParams, User],
+    extraModels: [PaginatedDto, PaginationParams, User, Teacher],
   });
   SwaggerModule.setup('api', app, document, customOptions);
   await app.listen(process.env.PORT || 3000);

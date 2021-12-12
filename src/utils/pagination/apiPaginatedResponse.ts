@@ -4,6 +4,7 @@ import { PaginatedDto } from './paginated.dto';
 
 export const ApiPaginatedResponse = <TModel extends Type<any>>(
   model: TModel,
+  extraModel: Type<any> = null,
 ) => {
   return applyDecorators(
     ApiOkResponse({
@@ -15,7 +16,12 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
             properties: {
               docs: {
                 type: 'array',
-                items: { $ref: getSchemaPath(model) },
+                items: {
+                  allOf: [
+                    { $ref: getSchemaPath(model) },
+                    { ...(extraModel && { $ref: getSchemaPath(extraModel) }) },
+                  ],
+                },
               },
             },
           },

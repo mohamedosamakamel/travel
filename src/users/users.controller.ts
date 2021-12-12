@@ -31,6 +31,8 @@ import { Public } from 'src/auth/decorators/public.decorator';
 import { FilterQuery, PaginateResult } from 'mongoose';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from 'src/utils/pagination/apiPaginatedResponse';
+import { Student } from './models/student.model';
+import { Teacher } from './models/teacher.model';
 
 @ApiBearerAuth()
 @ApiTags('USERS')
@@ -42,7 +44,7 @@ export class UsersController {
   ) {}
 
   @Roles(UserRole.STUDENT)
-  @ApiPaginatedResponse(User)
+  @ApiPaginatedResponse(User, Teacher)
   @Get()
   async findAll(
     @Query() paginationOptions: PaginationParams,
