@@ -26,7 +26,7 @@ import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
-import ParamsWithId from 'src/utils/paramsWithId';
+import ParamsOrQueryWithId from 'src/utils/paramsOrQueryWithId';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { FilterQuery, PaginateResult } from 'mongoose';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -89,7 +89,9 @@ export class UsersController {
 
   @Public()
   @Get(':id')
-  async fetchUserById(@Param() { id }: ParamsWithId): Promise<UserDocument> {
+  async fetchUserById(
+    @Param() { id }: ParamsOrQueryWithId,
+  ): Promise<UserDocument> {
     return await this.usersService.findOne({
       _id: id,
     } as FilterQuery<UserDocument>);
