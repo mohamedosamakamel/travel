@@ -12,11 +12,13 @@ import {
   FilterQuery,
   Model,
   PaginateModel,
+  PaginateOptions,
   PaginateResult,
 } from 'mongoose';
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
+import { FilterQueryParamsUser } from './dto/filterAndOptionsQuery.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   Student,
@@ -25,6 +27,7 @@ import {
 } from './models/student.model';
 import { Teacher, TeacherDocument } from './models/teacher.model';
 import { User, UserDocument, UserRole, UserSchema } from './models/_user.model';
+import * as _ from 'lodash';
 
 @Injectable()
 export class UsersService {
@@ -35,12 +38,24 @@ export class UsersService {
   ) {}
 
   async findAll(
-    paginationOptions: PaginationParams,
-  ): Promise<PaginateResult<UserDocument>> {
-    let users = await (this.userModel as PaginateModel<UserDocument>).paginate(
-      {} as FilterQuery<UserDocument>,
-      paginationOptions,
-    );
+    queryFiltersAndOptions: FilterQueryParamsUser,
+  ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
+    let filters: FilterQuery<UserDocument> = _.pick(queryFiltersAndOptions, [
+      'username',
+    ]);
+    let options: PaginateOptions = _.pick(queryFiltersAndOptions, [
+      'page',
+      'limit',
+    ]);
+    let users;
+    if (queryFiltersAndOptions.allowPagination) {
+      users = await (this.userModel as PaginateModel<UserDocument>).paginate(
+        filters,
+        options,
+      );
+    } else {
+      users = await this.userModel.find(filters);
+    }
     return users;
   }
 

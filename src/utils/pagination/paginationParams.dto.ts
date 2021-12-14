@@ -1,5 +1,5 @@
 import { IsNumber, Min, IsOptional } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Type, Transform } from 'class-transformer';
 
 export class PaginationParams {
   @IsOptional()
@@ -13,4 +13,10 @@ export class PaginationParams {
   @IsNumber()
   @Min(1)
   limit?: number = 8;
+
+  @IsOptional()
+  @Transform(({ obj }) => {
+    return [true, 'true'].indexOf(obj.allowPagination) > -1;
+  })
+  allowPagination?: boolean = true;
 }
