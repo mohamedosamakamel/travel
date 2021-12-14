@@ -18,7 +18,7 @@ import {
 import { RegisterDto } from 'src/auth/dto/register.dto';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
-import { FilterQueryParamsUser } from './dto/filterAndOptionsQuery.dto';
+import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {
   Student,
@@ -38,7 +38,7 @@ export class UsersService {
   ) {}
 
   async findAll(
-    queryFiltersAndOptions: FilterQueryParamsUser,
+    queryFiltersAndOptions: FilterQueryOptionsUser,
   ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
     let filters: FilterQuery<UserDocument> = _.pick(queryFiltersAndOptions, [
       'username',

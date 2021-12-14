@@ -33,7 +33,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { ApiPaginatedResponse } from 'src/utils/pagination/apiPaginatedResponse';
 import { Student } from './models/student.model';
 import { Teacher } from './models/teacher.model';
-import { FilterQueryParamsUser } from './dto/filterAndOptionsQuery.dto';
+import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
 
 @ApiBearerAuth()
 @ApiTags('USERS')
@@ -48,10 +48,10 @@ export class UsersController {
   @ApiPaginatedResponse(User)
   @Get()
   async findAll(
-    @Query() queryFiltersAndOptions: FilterQueryParamsUser,
+    @Query() queryFiltersAndOptions: FilterQueryOptionsUser,
   ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
     return await this.usersService.findAll(
-      queryFiltersAndOptions as FilterQueryParamsUser,
+      queryFiltersAndOptions as FilterQueryOptionsUser,
     );
   }
 
