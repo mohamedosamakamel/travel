@@ -19,6 +19,7 @@ import { VerificationInstance } from 'twilio/lib/rest/verify/v2/service/verifica
 import { User, UserDocument } from 'src/users/models/_user.model';
 import { FilterQuery } from 'mongoose';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserRepository } from 'src/users/users.repository';
 
 @ApiBearerAuth()
 @ApiTags('PHONE-CONFIRMATION')
@@ -26,7 +27,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class PhoneConfirmationController {
   constructor(
     private readonly phoneConfirmationService: PhoneConfirmationService,
-    private readonly userService: UsersService,
+    private readonly userRepository: UserRepository,
   ) {}
 
   @Public()
@@ -47,7 +48,7 @@ export class PhoneConfirmationController {
     @Body() verifyData: VerifyPhoneDto,
   ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode(verifyData);
-    return await this.userService.update(
+    return await this.userRepository.updateOne(
       { phone: verifyData.phone } as FilterQuery<UserDocument>,
       { enabled: true } as UpdateUserDto,
     );

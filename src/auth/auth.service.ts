@@ -19,21 +19,22 @@ import { UserNotFoundException } from 'src/users/exceptions/userNotFound.excepti
 import { JwtService } from '@nestjs/jwt';
 import { StudentDocument } from 'src/users/models/student.model';
 import { CreateQuery, FilterQuery } from 'mongoose';
+import { UserRepository } from 'src/users/users.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly userService: UsersService,
+    private readonly userRepository: UserRepository,
     private readonly configService: ConfigService,
     private readonly jwtService: JwtService,
   ) {}
 
   async register(registerationData: RegisterDto): Promise<StudentDocument> {
-    let user = await this.userService.findOne({
+    let user = await this.userRepository.findOne({
       phone: registerationData.phone,
     } as FilterQuery<UserDocument>);
     if (user) throw new BadRequestException('phone should be unique');
-    user = await this.userService.createUser({
+    user = await this.userRepository.create({
       ...registerationData,
       role: 'student',
     } as CreateQuery<UserDocument>);
@@ -45,7 +46,7 @@ export class AuthService {
     token: string;
   }> {
     const { phone } = loginDto;
-    let user = await this.userService.findOne({
+    let user = await this.userRepository.findOne({
       phone,
     } as FilterQuery<UserDocument>);
     if (!user) throw new UserNotFoundException();
@@ -75,11 +76,11 @@ export class AuthService {
       )}&access_token=${accessToken}`,
     );
     const { id, name, email } = data;
-    let user = await this.userService.findOne({
+    let user = await this.userRepository.findOne({
       facebookId: id,
     } as FilterQuery<UserDocument>);
     if (!user) {
-      user = await this.userService.createUser({
+      user = await this.userRepository.create({
         username: name,
         email,
         facebookId: id,
@@ -98,7 +99,7 @@ export class AuthService {
         return false;
       }
 
-      const user = await this.userService.findOne({
+      const user = await this.userRepository.findOne({
         _id: decoded.userId,
       } as FilterQuery<UserDocument>);
 

@@ -26,7 +26,7 @@ import { REQUEST } from '@nestjs/core';
 import { AuthUser } from 'src/auth/decorators/me.decorator';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { PaginationParams } from 'src/utils/pagination/paginationParams.dto';
-import ParamsOrQueryWithId from 'src/utils/paramsOrQueryWithId';
+import ParamsOrQueryWithId from 'src/utils/paramsOrQueryWithId.dto';
 import { Public } from 'src/auth/decorators/public.decorator';
 import { FilterQuery, PaginateResult } from 'mongoose';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';

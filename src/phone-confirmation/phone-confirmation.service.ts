@@ -22,6 +22,7 @@ export class PhoneConfirmationService {
           channel: 'sms',
         });
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }

@@ -24,6 +24,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { StudentDocument } from 'src/users/models/student.model';
 import { FilterQuery } from 'mongoose';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { UserRepository } from 'src/users/users.repository';
 
 @ApiBearerAuth()
 @ApiTags('AUTH')
@@ -31,7 +32,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly usersService: UsersService,
+    private readonly userRepository: UserRepository,
     private readonly phoneConfirmationService: PhoneConfirmationService,
     @Inject(REQUEST) private readonly req: Record<string, unknown>,
   ) {}
@@ -92,7 +93,7 @@ export class AuthController {
     @Body() { phone, code, password }: ResetPasswordDto,
   ): Promise<UserDocument> {
     await this.phoneConfirmationService.verificationCode({ phone, code });
-    return await this.usersService.update(
+    return await this.userRepository.updateOne(
       { phone } as FilterQuery<UserDocument>,
       { password } as UpdateUserDto,
     );

@@ -15,6 +15,7 @@ import { User } from './users/models/_user.model';
 import { Student } from './users/models/student.model';
 import { Teacher } from './users/models/teacher.model';
 import { FilterQueryOptionsUser } from './users/dto/filterQueryOptions.dto';
+import ParamsOrQueryWithId from './utils/paramsOrQueryWithId.dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -45,7 +46,12 @@ async function bootstrap() {
     },
   };
   const document = SwaggerModule.createDocument(app, options, {
-    extraModels: [PaginatedDto, User, FilterQueryOptionsUser],
+    extraModels: [
+      PaginatedDto,
+      User,
+      FilterQueryOptionsUser,
+      ParamsOrQueryWithId,
+    ],
   });
   SwaggerModule.setup('api', app, document, customOptions);
   await app.listen(process.env.PORT || 3000);

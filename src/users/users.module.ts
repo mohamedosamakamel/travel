@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { MulterModule } from '@nestjs/platform-express';
 import { UploadCloudinary } from 'src/utils/services/upload-cloudinary';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UserRepository } from './users.repository';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     }),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService],
+  providers: [UsersService, UserRepository],
+  exports: [UsersService, UserRepository],
 })
 export class UsersModule {}
