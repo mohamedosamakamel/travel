@@ -55,6 +55,7 @@ export class User {
       return username.trim();
     },
     required: true,
+    index: true,
   })
   username: string;
 

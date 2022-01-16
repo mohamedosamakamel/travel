@@ -26,7 +26,6 @@ import { FilterQuery } from 'mongoose';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserRepository } from 'src/users/users.repository';
 
-@ApiBearerAuth()
 @ApiTags('AUTH')
 @Controller('auth')
 export class AuthController {

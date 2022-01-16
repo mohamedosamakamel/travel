@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
@@ -31,7 +31,8 @@ export class JwtAuthGuard implements CanActivate {
     if (isPublic) {
       if (!request.header('authorization')) return true;
     } else {
-      if (!request.header('authorization')) return false;
+      if (!request.header('authorization'))
+        throw new UnauthorizedException('access token is required .');
     }
     try {
       const decoded: TokenPayload = await this.jwtService.verify(token);
@@ -45,7 +46,11 @@ export class JwtAuthGuard implements CanActivate {
       const user = await this.userService.findOne({
         _id: decoded.userId,
       } as FilterQuery<UserDocument>);
-      if (!user) return false;
+      if (!user)
+        throw new HttpException(
+          'Invalid access token...',
+          HttpStatus.UNAUTHORIZED,
+        );
 
       if (
         request.path.split('/')[3] === 'change-profile-unauthorized' ||
