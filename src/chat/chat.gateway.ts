@@ -20,6 +20,7 @@ import { WebsocketsExceptionFilter } from './filters/WebsocketsException.filter'
   cors: {
     origin: '*',
   },
+  namespace: 'chat',
 })
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -28,19 +29,19 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private readonly authService: AuthService) {}
   async handleConnection(@ConnectedSocket() client: Socket) {
     console.log('connected');
-    if (!client.handshake.headers.authorization) {
-      console.log('no token provided');
-      client.disconnect();
-      return;
-    }
+    // if (!client.handshake.headers.authorization) {
+    //   console.log('no token provided');
+    //   client.disconnect();
+    //   return;
+    // }
 
-    const user: UserDocument | false =
-      await this.authService.verifyUserByTokenFromSocket(
-        client.handshake.headers.authorization.split(' ')[1],
-      );
-    // console.log(user);
-    if (user) client.join(`user_${user._id}`);
-    else client.disconnect();
+    // const user: UserDocument | false =
+    //   await this.authService.verifyUserByTokenFromSocket(
+    //     client.handshake.headers.authorization.split(' ')[1],
+    //   );
+    // // console.log(user);
+    // if (user) client.join(`user_${user._id}`);
+    // else client.disconnect();
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
