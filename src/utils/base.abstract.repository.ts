@@ -8,6 +8,8 @@ import {
   Document,
   PaginateOptions,
   PaginateModel,
+  PaginateResult,
+  QueryOptions,
 } from 'mongoose';
 
 type TDocument<T> = T & Document;
@@ -23,20 +25,30 @@ export abstract class BaseAbstractRepository<T> {
     return newDocument;
   }
 
+  public async createDoc(data: T): Promise<TDocument<T>> {
+    const newDocument = new this.model(data).save();
+    return newDocument;
+  }
+
   public async findOne(
     filterQuery: FilterQuery<TDocument<T>>,
+    options: QueryOptions = {},
   ): Promise<TDocument<T>> {
-    const doc = await this.model.findOne(filterQuery);
+    const doc = await this.model.findOne(filterQuery).setOptions(options);
     return doc;
   }
 
   public async findAllWithPaginationOption(
     queryFiltersAndOptions: any,
-  ): Promise<TDocument<T>[]> {
-    const filters: FilterQuery<TDocument<T>> = _.pick(queryFiltersAndOptions, [
-      'username',
-    ]);
+    arrayOfFilters: string[],
+    arrayOfOptions: string[] = [],
+  ): Promise<PaginateResult<TDocument<T>> | TDocument<T>[]> {
+    const filters: FilterQuery<TDocument<T>> = _.pick(
+      queryFiltersAndOptions,
+      arrayOfFilters,
+    );
     const options: PaginateOptions = _.pick(queryFiltersAndOptions, [
+      ...arrayOfOptions,
       'page',
       'limit',
     ]);
@@ -47,7 +59,7 @@ export abstract class BaseAbstractRepository<T> {
         options,
       );
     } else {
-      docs = await this.model.find(filters);
+      docs = await this.model.find(filters).setOptions(options);
     }
     return docs;
   }
@@ -61,8 +73,9 @@ export abstract class BaseAbstractRepository<T> {
   public async updateOne(
     filterQuery: FilterQuery<TDocument<T>>,
     updateQuery: UpdateQuery<TDocument<T>>,
+    options: QueryOptions = {},
   ): Promise<TDocument<T>> {
-    const doc = await this.model.findOne(filterQuery);
+    const doc = await this.model.findOne(filterQuery).setOptions(options);
     if (!doc) throw new NotFoundException(`${this.model.modelName} not found`);
     await doc.set(updateQuery).save();
     return doc;

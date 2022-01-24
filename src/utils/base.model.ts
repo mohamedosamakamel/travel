@@ -18,7 +18,4 @@ export abstract class BaseModel {
   id: string; // _id getter as string
   createdAt: Date; // provided by schemaOptions.timestamps
   updatedAt: Date; // provided by schemaOptions.timestamps
-  public static defaultOptions() {
-    return { lean: true, autopopulate: true };
-  }
 }

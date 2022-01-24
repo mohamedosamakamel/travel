@@ -29,9 +29,9 @@
     "@nestjs/mongoose": "^9.0.1",
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.0",
-    "@nestjs/platform-socket.io": "^8.2.3",
+    "@nestjs/platform-socket.io": "^8.2.5",
     "@nestjs/swagger": "^5.1.5",
-    "@nestjs/websockets": "^8.2.3",
+    "@nestjs/websockets": "^8.2.5",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "class-transformer": "^0.4.0",
@@ -57,7 +57,8 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.2.0",
-    "twilio": "^3.71.2"
+    "twilio": "^3.71.2",
+    "uninstall": "0.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",

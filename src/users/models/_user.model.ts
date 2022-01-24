@@ -1,5 +1,10 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Model, ObjectId } from 'mongoose';
+import {
+  Prop,
+  Schema,
+  SchemaFactory,
+  DiscriminatorOptions,
+} from '@nestjs/mongoose';
+import { Document, Model, ObjectId, AcceptsDiscriminator } from 'mongoose';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '../../utils/constants';
