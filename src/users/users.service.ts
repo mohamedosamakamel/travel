@@ -14,6 +14,7 @@ import {
   PaginateModel,
   PaginateOptions,
   PaginateResult,
+  UpdateQuery,
 } from 'mongoose';
 import { ChangePasswordDto } from 'src/users/dto/change-password.dto';
 import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
@@ -68,7 +69,7 @@ export class UsersService {
 
     return await this.userRepository.updateOne(
       { _id: me._id } as FilterQuery<UserDocument>,
-      { password: newPassword } as UpdateUserDto,
+      { password: newPassword } as UpdateQuery<UserDocument>,
     );
   }
 }
