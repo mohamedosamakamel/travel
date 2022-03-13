@@ -1,6 +1,3 @@
-build:
-  docker:
-    web: Dockerfile
 setup:
   config:
     MONGODB_URI: mongodb://max:secret@mongodb:27017/nest-docker?authSource=admin
@@ -15,3 +12,6 @@ setup:
     cloud_name:  dqfrk92mp
     api_key :  253596391863857
     api_secret :  zUSdqm663H7lfMKqdirIGZxu318
+build:
+  docker:
+    web: Dockerfile
