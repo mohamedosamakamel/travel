@@ -29,7 +29,7 @@ RUN npm ci \
 FROM node:14-alpine3.14
 
 ENV NODE_ENV production
-
+ENV MONGODB_URI= mongodb+srv://Admin:Admin123456@bassthalk.7nkfp.mongodb.net/test1?retryWrites=true&w=majority
 USER node
 WORKDIR /home/node
 
