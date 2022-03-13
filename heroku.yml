@@ -1,17 +1,3 @@
-setup:
-  config:
-    MONGODB_URI: mongodb://max:secret@mongodb:27017/nest-docker?authSource=admin
-    CLOUDINARY_URL: cloudinary://716494354337253:x5gdQ2S2bshPvJ0YmvEwd4715YQ@hamza2021
-    JWT_SECRET: supersecret
-    clientID :  1017089558534-sg5lphbqs179g9fm3b5qcrigl6l2br20.apps.googleusercontent.com
-    clientSecret :  d2q1gNN96PNi5Xyb-gI3PFGN
-    TWILIO_AUTH_TOKEN: 21260d2db9e10751a20c5c10a227244b
-    TWILIO_ACCOUNT_SID: AC2a7cefcd9c7c7714440d00eca7aa7720
-    TWILIO_ACCOUNT_VERIFY_SID: VAdf43c41c1e54c08f202f283e0b100e47
-    facebookUrl: https://graph.facebook.com/v2.12/me?fields=id,name,email,gender,picture{url}
-    cloud_name:  dqfrk92mp
-    api_key :  253596391863857
-    api_secret :  zUSdqm663H7lfMKqdirIGZxu318
 build:
   docker:
     web: Dockerfile
