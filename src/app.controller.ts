@@ -10,6 +10,7 @@ export class AppController {
     private readonly messageQueueService: MessageQueueService,
   ) {}
 
+  @Public()
   @Get()
   getHello() {
     const duration = 1000
