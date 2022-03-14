@@ -10,7 +10,7 @@ services:
         env_file:
             - ./env/be.env
         ports:
-            - 9001:9001
+            - 4001:4001
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules 

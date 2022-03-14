@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Public } from './auth/decorators/public.decorator';
 import { MessageQueueService } from './message-queue/message-queue.service';
-
+import * as test from 'qiniu-js'
 @Controller()
 export class AppController {
   constructor(
