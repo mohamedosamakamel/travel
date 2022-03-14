@@ -1,9 +1,9 @@
 module.exports = {
   apps: [
     {
-      name: 'Nest App 4',
+      name: 'Nest App',
       script: './dist/main.js',
-      instances: '2',
+      instances: '4',
       exec_mode: 'cluster',
       autorestart: true,
     },
