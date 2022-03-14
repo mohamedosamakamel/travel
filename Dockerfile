@@ -66,5 +66,6 @@ WORKDIR /home/node
 COPY --from=builder /home/node/package*.json /home/node/
 COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
 COPY --from=builder /home/node/dist/ /home/node/dist/
+COPY --from=builder /home/node/ecosystem.config.js /home/node/ecosystem.config.js
 
 CMD ["pm2", "reload","ecosystem.config.js","--env","production"]
