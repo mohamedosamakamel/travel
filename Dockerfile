@@ -1,19 +1,19 @@
 # DEV WITH COMPOSE
-FROM node:12.13-alpine
+# FROM node:12.13-alpine
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package*.json ./
+# COPY package*.json ./
 
-RUN npm install glob rimraf
+# RUN npm install glob rimraf
 
-RUN npm install --only=development
+# RUN npm install --only=development
 
-COPY . .
+# COPY . .
 
-RUN npm run build
+# RUN npm run build
 
-# PRODUCTION
+# PRODUCTION (HEROKU , CAPROVER)
 # FROM node:14-alpine3.14 as builder
 
 # ENV NODE_ENV build

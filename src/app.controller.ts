@@ -18,7 +18,7 @@ export class AppController {
     await this.messageQueueService.publishToChannel({
       routingKey: 'test1',
       exchangeName: '',
-      data: 'remah',
+      data: 'q',
     });
     return 'OK';
   }

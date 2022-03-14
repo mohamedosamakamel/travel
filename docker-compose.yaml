@@ -3,37 +3,37 @@ version: '3.8'
 services:
     be:
         container_name: nestjs_api_dev
-        # image: nestjs-docker:1.0.0
-        build: ./
-            # context: ./
-            # dockerfile: dev.Dockerfile
+        build:
+            context: ./
+            dockerfile: dockerfiles/dev.dockerfile
         command: npm run start:dev
         env_file:
             - ./env/be.env
         ports:
-            - 3000:3000
-        volumes:
-            - .:/usr/src/app
-            - /usr/src/app/node_modules 
-        depends_on:
-            - mongodb   
-    test1_consumer:
-        container_name: consumer_1
-        build: ./
-        command: nodemon dist/message-queue/worker.js
-        env_file:
-            - ./env/be.env
+            - 3003:3003
         volumes:
             - .:/usr/src/app
             - /usr/src/app/node_modules
+        depends_on:
+            - mongodb
+    test1_consumer:
+        container_name: consumer_1
+        build:
+            context: ./
+            dockerfile: dockerfiles/consumer.dockerfile
+        command: node dist/message-queue/worker.js
+        env_file:
+            - ./env/be.env
+        depends_on:
+            - mongodb
     mongodb:
         image: 'mongo'
-        volumes: 
-        - data:/data/db
+        volumes:
+            - data:/data/db
         ports:
             - 27017:27017
-        env_file: 
-        - ./env/mongo.env
+        env_file:
+            - ./env/mongo.env
 
-volumes: 
-  data:
+volumes:
+    data:
