@@ -13,7 +13,7 @@ export class AppController {
   @Public()
   @Get()
   getHello() {
-    const duration = 1000
+    const duration = 30000
     const start = Date.now();
     while (Date.now() - start < duration) {}
   }
