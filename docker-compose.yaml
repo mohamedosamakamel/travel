@@ -17,6 +17,15 @@ services:
             - /usr/src/app/node_modules 
         depends_on:
             - mongodb   
+    test1_consumer:
+        container_name: consumer_1
+        build: ./
+        command: nodemon dist/message-queue/worker.js
+        env_file:
+            - ./env/be.env
+        volumes:
+            - .:/usr/src/app
+            - /usr/src/app/node_modules
     mongodb:
         image: 'mongo'
         volumes: 
