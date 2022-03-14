@@ -43,7 +43,6 @@
 # PM2 WITH DOCKER
 FROM node:14-alpine3.14 as builder
 
-RUN  npm install pm2  -g
 
 ENV NODE_ENV build
 
@@ -66,5 +65,6 @@ WORKDIR /home/node
 COPY --from=builder /home/node/package*.json /home/node/
 COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
 COPY --from=builder /home/node/dist/ /home/node/dist/
+RUN  npm install pm2  -g
 
 CMD ["pm2", "reload","ecosystem.config.js","--env","production"]
