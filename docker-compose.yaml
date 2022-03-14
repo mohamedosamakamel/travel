@@ -3,9 +3,9 @@ version: '3.8'
 services:
     be:
         container_name: nestjs_api_dev
-        build: ./
-            # context: ./
-            # dockerfile: dev.Dockerfile
+        build: 
+            context: ./
+            dockerfile: dockerfiles/dev.dockerfile
         command: npm run start:dev
         env_file:
             - ./env/be.env
@@ -18,7 +18,9 @@ services:
             - mongodb   
     test1_consumer:
         container_name: consumer_1
-        build: ./
+        build: 
+            context: ./
+            dockerfile: dockerfiles/dev.dockerfile
         command: node dist/message-queue/worker.js
         env_file:
             - ./env/be.env

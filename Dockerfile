@@ -1,13 +1,25 @@
-FROM node:12.13-alpine
+FROM node:14-alpine3.14 as builder
 
-WORKDIR /usr/src/app
+ENV NODE_ENV build
 
-COPY package*.json ./
+WORKDIR /home/node
 
-RUN npm install glob rimraf
+COPY . /home/node
 
-RUN npm install --only=development
+RUN npm ci \
+    && npm run build \
+    && npm prune --production
 
-COPY . .
+# ---
 
-RUN npm run build
+FROM node:14-alpine3.14
+
+ENV NODE_ENV production
+USER node
+WORKDIR /home/node
+
+COPY --from=builder /home/node/package*.json /home/node/
+COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
+COPY --from=builder /home/node/dist/ /home/node/dist/
+
+CMD ["node", "dist/main.js"]
