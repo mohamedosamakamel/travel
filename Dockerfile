@@ -59,12 +59,12 @@ RUN npm ci \
 FROM node:14-alpine3.14
 
 ENV NODE_ENV production
+RUN  npm install pm2  -g
 USER node
 WORKDIR /home/node
 
 COPY --from=builder /home/node/package*.json /home/node/
 COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
 COPY --from=builder /home/node/dist/ /home/node/dist/
-RUN  npm install pm2  -g
 
 CMD ["pm2", "reload","ecosystem.config.js","--env","production"]
