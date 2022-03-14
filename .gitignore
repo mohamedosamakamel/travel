@@ -36,4 +36,4 @@ lerna-debug.log*
 
 
 # dotenv environment variables folder
-/env
+**/*.env
