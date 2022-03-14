@@ -68,5 +68,4 @@ COPY --from=builder /home/node/node_modules/ /home/node/node_modules/
 COPY --from=builder /home/node/dist/ /home/node/dist/
 COPY --from=builder /home/node/ecosystem.config.js /home/node/ecosystem.config.js
 
-# CMD ["pm2-runtime", "start","ecosystem.config.js"]
-CMD [ "pm2","reload","Nest_App" ]
+CMD ["pm2-runtime", "start","ecosystem.config.js"]
