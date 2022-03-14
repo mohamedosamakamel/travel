@@ -5,11 +5,16 @@ import { MessageQueueService } from './message-queue/message-queue.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService,private readonly messageQueueService: MessageQueueService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly messageQueueService: MessageQueueService,
+  ) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getHello() {
+    const duration = 1000
+    const start = Date.now();
+    while (Date.now() - start < duration) {}
   }
 
   @Public()
