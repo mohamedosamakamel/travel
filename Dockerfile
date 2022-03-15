@@ -11,7 +11,6 @@ RUN npm ci \
     && npm prune --production
 
 # ---
-
 FROM node:14-alpine3.14
 
 ENV NODE_ENV production
