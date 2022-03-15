@@ -17,16 +17,16 @@ services:
             - /usr/src/app/env 
         depends_on:
             - mongodb   
-    test1_consumer:
-        container_name: consumer_1
-        build: 
-            context: ./
-            dockerfile: dockerfiles/dev.dockerfile
-        command: node dist/message-queue/worker.js
-        env_file:
-            - ./env/be.env
-        depends_on:
-            - mongodb
+    # test1_consumer:
+    #     container_name: consumer_1
+    #     build: 
+    #         context: ./
+    #         dockerfile: dockerfiles/dev.dockerfile
+    #     command: node dist/message-queue/worker.js
+    #     env_file:
+    #         - ./env/be.env
+    #     depends_on:
+    #         - mongodb
     mongodb:
         image: 'mongo'
         volumes: 
