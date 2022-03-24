@@ -22,14 +22,22 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument, UserRole, UserSchema } from './models/_user.model';
 import * as _ from 'lodash';
 import { UserRepository } from './users.repository';
+import { cacheOperationsService } from 'src/utils/redis/cache.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly cacheOperationsService: cacheOperationsService,
+  ) {}
 
   async findAll(
     queryFiltersAndOptions: FilterQueryOptionsUser,
   ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
+    console.log('here');
+    // await this.cacheOperationsService.clearCache(
+    //   '/users?page=1&limit=8&allowPagination=true',
+    // );
     const users = await this.userRepository.findAllWithPaginationOption(
       queryFiltersAndOptions,
       ['username'],

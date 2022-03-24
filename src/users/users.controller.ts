@@ -15,6 +15,7 @@ import {
   HttpStatus,
   HttpCode,
   Query,
+  CacheInterceptor,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { request } from 'http';
@@ -44,12 +45,16 @@ export class UsersController {
     @Inject(REQUEST) private readonly req: Record<string, unknown>,
   ) {}
 
-  @Roles(UserRole.STUDENT)
+
+  // @Roles(UserRole.STUDENT)
+  // @UseInterceptors(CacheInterceptor)
+  @Public()
   @ApiOkResponseGeneral(User)
   @Get()
   async findAll(
     @Query() queryFiltersAndOptions: FilterQueryOptionsUser,
   ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
+    console.log(process.env.ELASTICSEARCH_USERNAME)
     return await this.usersService.findAll(
       queryFiltersAndOptions as FilterQueryOptionsUser,
     );

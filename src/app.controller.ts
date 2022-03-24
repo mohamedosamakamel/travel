@@ -12,7 +12,7 @@ import * as test6 from 'graphql'
 export class AppController {
   constructor(
     private readonly appService: AppService,
-    private readonly messageQueueService: MessageQueueService,
+    // private readonly messageQueueService: MessageQueueService,
   ) {}
 
   // @Public()
