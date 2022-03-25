@@ -47,14 +47,12 @@ export class UsersController {
 
 
   // @Roles(UserRole.STUDENT)
-  // @UseInterceptors(CacheInterceptor)
   @Public()
   @ApiOkResponseGeneral(User)
   @Get()
   async findAll(
     @Query() queryFiltersAndOptions: FilterQueryOptionsUser,
   ): Promise<PaginateResult<UserDocument> | UserDocument[]> {
-    console.log(process.env.ELASTICSEARCH_USERNAME)
     return await this.usersService.findAll(
       queryFiltersAndOptions as FilterQueryOptionsUser,
     );

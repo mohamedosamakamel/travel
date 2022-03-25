@@ -15,7 +15,7 @@ export class CacheConfigService implements CacheOptionsFactory {
       host: this.configService.get('REDIS_HOST'),
       port: this.configService.get('REDIS_PORT'),
       ttl: 0,
-      auth_pass: this.configService.get('REDIS_PASS'),
+      // auth_pass: this.configService.get('REDIS_PASS'),
     };
   }
 }

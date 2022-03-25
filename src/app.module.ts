@@ -8,8 +8,8 @@ import { PhoneConfirmationModule } from './phone-confirmation/phone-confirmation
 import { DatabaseModule } from './database.module';
 import { ChatModule } from './chat/chat.module';
 import { MessageQueueModule } from './message-queue/message-queue-publisher.module';
-import { CacheConfigService } from './utils/redis/cacheConfigService';
-import { cacheOperationsModule } from './utils/redis/redis.module';
+import { CacheConfigService } from './cache/cacheConfigService';
+import { cacheOperationsModule } from './cache/cache.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -19,7 +19,7 @@ import { cacheOperationsModule } from './utils/redis/redis.module';
     PhoneConfirmationModule,
     ChatModule,
     // MessageQueueModule,
-    cacheOperationsModule,
+    // cacheOperationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

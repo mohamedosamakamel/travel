@@ -15,7 +15,7 @@ import { MulterModule } from '@nestjs/platform-express';
 import { UploadCloudinary } from 'src/utils/services/upload-cloudinary';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserRepository } from './users.repository';
-import { cacheOperationsModule } from 'src/utils/redis/redis.module';
+import { cacheOperationsModule } from 'src/cache/cache.module';
 
 @Module({
   imports: [
@@ -34,7 +34,6 @@ import { cacheOperationsModule } from 'src/utils/redis/redis.module';
       useClass: UploadCloudinary,
       inject: [ConfigService],
     }),
-    cacheOperationsModule,
   ],
   controllers: [UsersController],
   providers: [UsersService, UserRepository],

@@ -1,6 +1,6 @@
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { cacheOperationsService } from './cache.service';
+import { cacheOperationsService } from './cache-operations.service';
 import { CacheConfigService } from './cacheConfigService';
 
 @Module({
