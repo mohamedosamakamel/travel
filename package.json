@@ -34,6 +34,7 @@
     "@nestjs/websockets": "^8.2.5",
     "amqp-connection-manager": "^4.1.1",
     "amqplib": "^0.8.0",
+    "aws-sdk": "^2.1101.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^3.6.0",
