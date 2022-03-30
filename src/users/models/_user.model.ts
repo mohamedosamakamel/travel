@@ -3,12 +3,14 @@ import {
   Schema,
   SchemaFactory,
   DiscriminatorOptions,
+  raw,
 } from '@nestjs/mongoose';
 import { Document, Model, ObjectId, AcceptsDiscriminator } from 'mongoose';
 import { UnprocessableEntityException } from '@nestjs/common';
 import { hash, compare } from 'bcryptjs';
 import { Constants } from '../../utils/constants';
 import { Password } from '../../auth/utils/Password';
+import * as admin from 'firebase-admin';
 
 export type UserDocument = User & Document;
 
@@ -16,6 +18,17 @@ export enum UserRole {
   ADMIN = 'admin',
   STUDENT = 'student',
   TEACHER = 'teacher',
+}
+
+export enum DeviceType {
+  android = 'android',
+  ios = 'ios',
+  web = 'web',
+}
+
+export interface PushToken {
+  deviceType: DeviceType;
+  deviceToken: string;
 }
 
 @Schema({
@@ -81,6 +94,24 @@ export class User {
 
   @Prop({ required: true, type: String, enum: Object.values(UserRole) })
   role: UserRole;
+
+  @Prop(
+    raw([
+      {
+        _id: false,
+        deviceType: {
+          type: String,
+          enum: ['android', 'ios', 'web'],
+          required: true,
+        },
+        deviceToken: {
+          type: String,
+          required: true,
+        },
+      },
+    ]),
+  )
+  pushTokens: PushToken[];
 }
 
 const UserSchema = SchemaFactory.createForClass(User);
@@ -127,6 +158,28 @@ UserSchema.pre('save', async function () {
     );
   }
 });
+
+//Notificiation
+
+UserSchema.methods.sendNotification = async function (message) {
+  const user = this;
+  let changed = false;
+  let len = user['pushTokens'].length;
+
+  while (len--) {
+    const deviceToken = user['pushTokens'][len].deviceToken;
+
+    message.token = deviceToken;
+    try {
+      await admin.messaging().send(message);
+      console.log('successfully');
+    } catch (error) {
+      user['pushTokens'].splice(len, 1);
+      changed = true;
+    }
+  }
+  if (changed) await this.save();
+};
 
 UserSchema.methods.isValidPassword = async function (password) {
   // return compare(password, (this as UserDocument).password);

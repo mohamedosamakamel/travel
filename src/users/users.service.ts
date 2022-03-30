@@ -24,11 +24,14 @@ import * as _ from 'lodash';
 import { UserRepository } from './users.repository';
 import { cacheOperationsService } from 'src/cache/cache-operations.service';
 
+function randomInRange(from: number, to: number) {
+  var r = Math.random();
+  return Math.floor(r * (to - from) + from);
+}
+
 @Injectable()
 export class UsersService {
-  constructor(
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async findAll(
     queryFiltersAndOptions: FilterQueryOptionsUser,

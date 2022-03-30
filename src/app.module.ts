@@ -10,6 +10,7 @@ import { ChatModule } from './chat/chat.module';
 import { MessageQueueModule } from './message-queue/message-queue-publisher.module';
 import { CacheConfigService } from './cache/cacheConfigService';
 import { cacheOperationsModule } from './cache/cache.module';
+import { NotificationModule } from './notification/notification.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -18,6 +19,7 @@ import { cacheOperationsModule } from './cache/cache.module';
     AuthModule,
     PhoneConfirmationModule,
     ChatModule,
+    NotificationModule,
     // MessageQueueModule,
     // cacheOperationsModule,
   ],

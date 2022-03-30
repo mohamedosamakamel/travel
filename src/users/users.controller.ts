@@ -35,6 +35,7 @@ import { ApiOkResponseGeneral } from 'src/utils/pagination/apiOkResponseGeneral'
 import { Student } from './models/student.model';
 import { Teacher } from './models/teacher.model';
 import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
+import { UserRepository } from './users.repository';
 
 @ApiBearerAuth()
 @ApiTags('USERS')
@@ -42,9 +43,9 @@ import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
+    private readonly UserRepository: UserRepository,
     @Inject(REQUEST) private readonly req: Record<string, unknown>,
   ) {}
-
 
   // @Roles(UserRole.STUDENT)
   @Public()
@@ -95,9 +96,7 @@ export class UsersController {
 
   @Public()
   @Get(':id')
-  async fetchUserById(
-    @Param() { id }: ParamsWithId,
-  ): Promise<UserDocument> {
+  async fetchUserById(@Param() { id }: ParamsWithId): Promise<UserDocument> {
     return await this.usersService.findOne({
       _id: id,
     } as FilterQuery<UserDocument>);
