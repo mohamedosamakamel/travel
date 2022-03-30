@@ -79,6 +79,7 @@ export class NotificationController {
     return 'Done';
   }
 
+  @Public()
   @Post('/sendTestFcmWithEncodeing')
   async sendTestFcmWithEncodeing(
     @Body() notificationBody: CreateNotificationDto,
@@ -97,7 +98,7 @@ export class NotificationController {
     await this.NotificationService.sendTest({
       ...notificationData,
       token:
-        'c37bsnmLRIfvn4AA27BBMV:APA91bGg0Q0ltMMjrkiA6PWbhp-CYUQyH_Cy3S9sM9vDX5ZLk4GJf__mahthyN33fZVrDUkpp9oRFQPQYLZOTC6Crx2Pez8h2Z_4zMYAxZP86UJFr2Ri5EaPKcYQPVDwwzCBDLhvUzE7',
+        'de8bjN9LhL6AU0zubVnjZn:APA91bHDogD00By4nlFT7Lkm5XjkJDoPj2wEIck82z9MOUx0Mcr81Hbe4CEShAE4i2ZhpcAApHk816lOrVFE6oRqWdl27ngsmvsTdu5gv6Lf0ziEBFF7QsCS5WMgTn_e9rY0db35ht2n',
     });
     return 'Done';
   }

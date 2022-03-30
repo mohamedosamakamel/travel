@@ -7,4 +7,6 @@ export class Constants {
     TEST: 'test',
     TEST1: 'test1',
   };
+
+  public static readonly GET_POSTS_CACHE_KEY = 'GET_POSTS_CACHE';
 }

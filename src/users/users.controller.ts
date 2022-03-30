@@ -16,6 +16,7 @@ import {
   HttpCode,
   Query,
   CacheInterceptor,
+  CacheKey,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { request } from 'http';
@@ -36,6 +37,7 @@ import { Student } from './models/student.model';
 import { Teacher } from './models/teacher.model';
 import { FilterQueryOptionsUser } from './dto/filterQueryOptions.dto';
 import { UserRepository } from './users.repository';
+import { Constants } from 'src/utils/constants';
 
 @ApiBearerAuth()
 @ApiTags('USERS')
@@ -48,6 +50,7 @@ export class UsersController {
   ) {}
 
   // @Roles(UserRole.STUDENT)
+  // @CacheKey(Constants.GET_POSTS_CACHE_KEY)
   @Public()
   @ApiOkResponseGeneral(User)
   @Get()
