@@ -77,19 +77,19 @@ export class User {
   })
   username: string;
 
-  @Prop()
+  @Prop({ type: String })
   password: string;
 
-  @Prop({ default: false })
+  @Prop({ default: false, type: Boolean })
   enabled: boolean;
 
-  @Prop()
+  @Prop({ type: String })
   photo: string;
 
-  @Prop({ index: true, unique: true, sparse: true })
+  @Prop({ index: true, unique: true, sparse: true, type: String })
   facebookId: string;
 
-  @Prop({ index: true, unique: true, sparse: true })
+  @Prop({ index: true, unique: true, sparse: true, type: String })
   googleId: string;
 
   @Prop({ required: true, type: String, enum: Object.values(UserRole) })
