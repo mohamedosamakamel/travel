@@ -40,8 +40,10 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     //     client.handshake.headers.authorization.split(' ')[1],
     //   );
     // // console.log(user);
-    // if (user) client.join(`user_${user._id}`);
-    // else client.disconnect();
+    // if (user) {
+      // client.join(`user_${user._id}`);
+      // client.data.user = user;// try here to save data at client object , instead of call every time wsJwtGuard 'but make sure about security'
+    // } else client.disconnect();
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
