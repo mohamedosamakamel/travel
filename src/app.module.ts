@@ -11,6 +11,7 @@ import { MessageQueueModule } from './message-queue/message-queue-publisher.modu
 import { CacheConfigService } from './cache/cacheConfigService';
 import { cacheOperationsModule } from './cache/cache.module';
 import { NotificationModule } from './notification/notification.module';
+import { ChangeStreamsModule } from './change-streams/change-streams.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -20,6 +21,7 @@ import { NotificationModule } from './notification/notification.module';
     PhoneConfirmationModule,
     ChatModule,
     NotificationModule,
+    // ChangeStreamsModule,
     // MessageQueueModule,
     // cacheOperationsModule,
   ],

@@ -11,6 +11,7 @@ import {
   PaginateResult,
   QueryOptions,
 } from 'mongoose';
+import { ChangeStreamOptions, ChangeStream } from 'mongodb';
 
 type TDocument<T> = T & Document;
 export abstract class BaseAbstractRepository<T> {
@@ -99,5 +100,12 @@ export abstract class BaseAbstractRepository<T> {
     options: QueryOptions = {},
   ): Promise<void> {
     await this.model.updateMany(filterQuery, updateQuery);
+  }
+
+  public watch(
+    pipeline?: Array<Record<string, unknown>>,
+    options?: ChangeStreamOptions,
+  ): ChangeStream<any> {
+    return this.model.watch(pipeline, options);
   }
 }
