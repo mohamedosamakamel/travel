@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: be
-          image: registry.digitalocean.com/remah/be:v18
+          image: registry.digitalocean.com/remah/be:v22
           env:
             - name: PORT
               value: "3001"
@@ -45,11 +45,11 @@ spec:
             - name: AMQP_URL
               value: "amqps://kmuergjm:Q3oBdA_iX3triTcv_2YopwdL4AtHkz8D@jaguar.rmq.cloudamqp.com/kmuergjm"
             - name: REDIS_HOST
-              value: "redis"
+              value: "redis-11356.c262.us-east-1-3.ec2.cloud.redislabs.com"
             - name: REDIS_PORT
-              value: "6379"
+              value: "11356"
             - name: REDIS_PASS
-              value: "DsJBhL2RvPw8FCE1Q7uFKrSKByWn9meQ"
+              value: "7gjZsWKNcuA5ShDNOChqSfaMaaSWRAWI"
             - name: DO_SPACE_ACCESS_KEY
               value: "64FK4EFQPL5R2QDT3REM"
             - name: DO_SPACE_SECRET_KEY
