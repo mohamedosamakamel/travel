@@ -39,4 +39,4 @@ lerna-debug.log*
 **/*.env
 
 # k8s folder
-kubernetes
+# kubernetes
