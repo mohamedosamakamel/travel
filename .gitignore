@@ -37,3 +37,6 @@ lerna-debug.log*
 
 # dotenv environment variables folder
 **/*.env
+
+# k8s folder
+kubernetes
