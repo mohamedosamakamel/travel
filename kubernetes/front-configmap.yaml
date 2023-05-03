@@ -4,7 +4,7 @@ metadata:
   name: front-store-env
 data:
   PORT: "4000"
-  MONGODB_URI: "mongodb://mongodb-service:27017/remah1"
+  MONGODB_URI: "mongodb://mongodb-service:27017/remah"
   api_key: "remah"
   CLOUDINARY_URL: "cloudinary://716494354337253:x5gdQ2S2bshPvJ0YmvEwd4715YQ@hamza2021"
   JWT_SECRET: "supersecret"

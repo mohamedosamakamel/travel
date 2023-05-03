@@ -59,7 +59,7 @@ spec:
       labels:
         lbtype: external
         app: frontend
-        update-version: "23"
+        update-version: "24"
     spec:
       containers:
         - name: frontend
