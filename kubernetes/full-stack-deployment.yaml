@@ -18,6 +18,9 @@ spec:
       containers:
         - name: backend
           image: registry.digitalocean.com/remah/be:v22
+          resources:
+            requests:
+              cpu: 2m
           ports:
           - containerPort: 3001
             name: "3001-port"
@@ -64,6 +67,9 @@ spec:
       containers:
         - name: frontend
           image: registry.digitalocean.com/remah/be:v22
+          resources:
+            requests:
+              cpu: 2m
           ports:
           - containerPort: 4000
             name: "4000-port"
