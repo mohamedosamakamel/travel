@@ -6,14 +6,19 @@ import * as os from 'os';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
-  ) // private readonly messageQueueService: MessageQueueService,
-  {}
+    private readonly appService: AppService, // private readonly messageQueueService: MessageQueueService,
+  ) {}
 
   @Public()
   @Get()
   getHello() {
     return { host: os.hostname() };
+  }
+
+  @Public()
+  @Get('health')
+  health() {
+    return { healthStatus: 'OK' };
   }
 
   // @Public()
