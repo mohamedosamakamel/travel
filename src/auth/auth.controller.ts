@@ -25,6 +25,7 @@ import { StudentDocument } from 'src/users/models/student.model';
 import { FilterQuery } from 'mongoose';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserRepository } from 'src/users/users.repository';
+import { LoginResponse } from './utils/responses.model';
 
 @ApiTags('AUTH')
 @Controller('auth')
@@ -49,10 +50,7 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post('/login')
-  async login(@Body() LoginDto: LoginDto): Promise<{
-    user: UserDocument;
-    token: string;
-  }> {
+  async login(@Body() LoginDto: LoginDto): Promise<LoginResponse> {
     return await this.authService.login(LoginDto);
   }
 
@@ -61,7 +59,7 @@ export class AuthController {
   @Post('/login-googel')
   async loginGoogle(
     @Body() _loginGoogleData: LoginGoogleDto,
-  ): Promise<UserDocument> {
+  ): Promise<LoginResponse> {
     return await this.authService.loginGoogle(this.req.me as UserDocument);
   }
 
