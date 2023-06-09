@@ -41,6 +41,7 @@ import { Constants } from 'src/utils/constants';
 import { CreateRateDto } from 'src/rate/dto/create-rate.dto';
 import { RateService } from 'src/rate/rate.service';
 import { RateDocument } from 'src/rate/rate.model';
+import { ApiMultiFile } from 'src/utils/upload-multi-files.decorator';
 
 @ApiBearerAuth()
 @ApiTags('USERS')
@@ -52,7 +53,7 @@ export class UsersController {
 
     private readonly UserRepository: UserRepository,
     @Inject(REQUEST) private readonly req: Record<string, unknown>,
-  ) {}
+  ) { }
 
   // @Roles(UserRole.STUDENT)
   // @CacheKey(Constants.GET_POSTS_CACHE_KEY)
@@ -72,9 +73,11 @@ export class UsersController {
     return await this.usersService.getProfile(this.req.me as UserDocument);
   }
 
+
   @Patch('profile')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'photo', maxCount: 1 }]))
   @ApiConsumes('multipart/form-data')
+  // @ApiMultiFile('photo')
   async updateProfile(
     @UploadedFiles()
     files,
