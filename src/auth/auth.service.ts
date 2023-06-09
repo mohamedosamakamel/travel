@@ -20,7 +20,7 @@ import { JwtService } from '@nestjs/jwt';
 import { StudentDocument } from 'src/users/models/student.model';
 import { CreateQuery, FilterQuery } from 'mongoose';
 import { UserRepository } from 'src/users/users.repository';
-import { LoginResponse } from './utils/responses.model';
+import { LoginResponse } from './utils/Responses.model';
 
 @Injectable()
 export class AuthService {

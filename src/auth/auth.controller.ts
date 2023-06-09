@@ -25,7 +25,7 @@ import { StudentDocument } from 'src/users/models/student.model';
 import { FilterQuery } from 'mongoose';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { UserRepository } from 'src/users/users.repository';
-import { LoginResponse } from './utils/responses.model';
+import { LoginResponse } from './utils/Responses.model';
 
 @ApiTags('AUTH')
 @Controller('auth')
