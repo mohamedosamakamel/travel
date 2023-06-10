@@ -6,7 +6,7 @@ services:
         build: 
             context: ./
             dockerfile: dockerfiles/dev.dockerfile
-        command: npm run start:dev
+        # command: npm run start:dev
         env_file:
             - ./env/be.env
         ports:
@@ -15,8 +15,8 @@ services:
             - .:/usr/src/app
             - /usr/src/app/node_modules 
             - /usr/src/app/env 
-        depends_on:
-            - mongodb   
+        # depends_on:
+        #     - mongodb   
     # test1_consumer:
     #     container_name: consumer_1
     #     build: 
