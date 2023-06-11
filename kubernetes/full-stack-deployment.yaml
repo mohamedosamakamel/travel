@@ -20,7 +20,7 @@ spec:
         - name: backend
           image: registry.digitalocean.com/remah/be:v23
           readinessProbe:
-            periodSeconds: 1
+            periodSeconds: 100
             httpGet:
               path: /health
               port: 3001

@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: registry.digitalocean.com/remah/be:v51
+          image: registry.digitalocean.com/remah/be:v52
           readinessProbe:
             periodSeconds: 100
             httpGet:
