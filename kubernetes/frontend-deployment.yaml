@@ -19,9 +19,9 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: registry.digitalocean.com/remah/be:v22
+          image: registry.digitalocean.com/remah/be:v51
           readinessProbe:
-            periodSeconds: 1
+            periodSeconds: 100
             httpGet:
               path: /health
               port: 4000

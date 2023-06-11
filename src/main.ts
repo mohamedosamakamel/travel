@@ -59,6 +59,7 @@ async function bootstrap() {
   const sigs = ['SIGINT', 'SIGTERM', 'SIGQUIT']
   sigs.forEach(sig => {
     process.on(sig, () => {
+      console.log(sig)
       // Stops the server from accepting new connections and finishes existing connections.
       server.close(function (err) {
         if (err) {
