@@ -1,38 +1,45 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import {
-  MulterModuleOptions,
-  MulterOptionsFactory,
-} from '@nestjs/platform-express';
-import * as crypto from 'crypto';
-import * as mime from 'mime';
-import * as multer from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Injectable, mixin, NestInterceptor, Type } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
+import { diskStorage } from 'multer';
 
-@Injectable()
-export class UploadLocal implements MulterOptionsFactory {
-  //   public options: any = 'local';
-  constructor(private readonly configService: ConfigService) {}
-  createMulterOptions(): MulterModuleOptions {
-    return {
-      storage: multer.diskStorage({
-        destination: (req, file, cb) => {
-          cb(null, './upload');
-        },
-        filename: (req, file, cb) => {
-          console.log(this.configService.get<string>('api_key'));
-          crypto.pseudoRandomBytes(16, (err, raw) => {
-            if (err) {
-              throw new HttpException('error in upload', 500);
-            }
-            const fileName =
-              raw.toString('hex') +
-              Date.now() +
-              '.' +
-              mime.extension(file.mimetype);
-            cb(null, fileName);
-          });
-        },
-      }),
-    };
-  }
+interface LocalFilesInterceptorOptions {
+  fieldName: string;
+  path?: string;
+  fileFilter?: MulterOptions['fileFilter'];
+  limits?: MulterOptions['limits'];
 }
+
+function LocalFilesInterceptor(options: LocalFilesInterceptorOptions): Type<NestInterceptor> {
+  @Injectable()
+  class Interceptor implements NestInterceptor {
+    fileInterceptor: NestInterceptor;
+    constructor(configService: ConfigService) {
+      const filesDestination = configService.get('UPLOADED_FILES_DESTINATION');
+
+      const destination = `${filesDestination}${options.path}`
+
+      const multerOptions: MulterOptions = {
+        storage: diskStorage({
+          destination,
+          filename: function (_req, file, cb) {
+            console.log(file)
+            cb(null, Date.now() + file.originalname)
+          }
+        }),
+        fileFilter: options.fileFilter,
+        limits: options.limits
+      }
+
+      this.fileInterceptor = new (FileInterceptor(options.fieldName, multerOptions));
+    }
+
+    intercept(...args: Parameters<NestInterceptor['intercept']>) {
+      return this.fileInterceptor.intercept(...args);
+    }
+  }
+  return mixin(Interceptor);
+}
+
+export default LocalFilesInterceptor;

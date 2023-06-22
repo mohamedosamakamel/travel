@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { BadRequestException, Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Public } from './auth/decorators/public.decorator';
 import { MessageQueueService } from './message-queue/message-queue.service';
 import * as os from 'os';
 import { UserRepository } from 'src/users/users.repository';
+import LocalFilesInterceptor from './utils/services/upload-local';
 @Controller()
 export class AppController {
   constructor(
@@ -32,6 +33,26 @@ export class AppController {
   @Get('health')
   health() {
     return { healthStatus: 'OK' };
+  }
+
+
+  @Public()
+  @Post('upload-local')
+  @UseInterceptors(LocalFilesInterceptor({
+    fieldName: 'file',
+    path: '/avatars',
+    fileFilter: (request, file, callback) => {
+      if (!file.mimetype.includes('image')) {
+        return callback(new BadRequestException('Provide a valid image'), false);
+      }
+      callback(null, true);
+    },
+    limits: {
+      fileSize: Math.pow(1024, 2) // 1MB
+    }
+  }))
+  uploadLocal(@UploadedFile() file: Express.Multer.File) {
+    return file
   }
 
   // @Public()
