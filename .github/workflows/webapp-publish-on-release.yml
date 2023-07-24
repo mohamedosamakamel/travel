@@ -1,0 +1,31 @@
+name: Build and publish manually
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version'
+        required: true
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo # (callout-1)
+        uses: actions/checkout@v2
+      - name: Build image # (callout-2)
+        run: docker build -t sample/my-page .
+      - name: Install doctl # (callout-3)
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Log in to DO Container Registry # (callout-4)
+        run: doctl registry login --expiry-seconds 60000
+      - name: Log in to Kubernetes # (callout-4)
+        run: doctl kubernetes cluster kubeconfig save f55a3b7c-b4a7-48b1-95c0-3e10bd265aa5
+      - name: testing kubectl
+        run: kubectl get all
+      - name: Tag image # (callout-5)
+        run: docker tag sample/my-page registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+      - name: Push image to DO Container Registry # (callout-6)
+        run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+      - name: apply the new image
+        run: kubectl set image deployment/remah-world-deployment nginx-hello=registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
