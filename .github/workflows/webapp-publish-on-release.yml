@@ -28,4 +28,4 @@ jobs:
       - name: Push image to DO Container Registry # (callout-6)
         run: docker push registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}
       - name: apply the new image
-        run: kubectl set image deployment/remah-world-deployment nginx-hello=registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}
+        run: kubectl set image deployment/wncc-arwapro-online-deployment nginx-hello=registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}
