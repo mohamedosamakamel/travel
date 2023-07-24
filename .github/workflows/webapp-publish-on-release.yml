@@ -24,8 +24,8 @@ jobs:
       - name: testing kubectl
         run: kubectl get all
       - name: Tag image # (callout-5)
-        run: docker tag sample/my-page registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+        run: docker tag sample/my-page registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}
       - name: Push image to DO Container Registry # (callout-6)
-        run: docker push registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+        run: docker push registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}
       - name: apply the new image
-        run: kubectl set image deployment/remah-world-deployment nginx-hello=registry.digitalocean.com/kubernetes-github-actions/my-sample-page:${{github.event.inputs.version }}
+        run: kubectl set image deployment/remah-world-deployment nginx-hello=registry.digitalocean.com/wncc/be:${{github.event.inputs.version }}

@@ -15,10 +15,10 @@ export class AppController {
   @Public()
   @Get()
   async getHello() {
-    await this.wait(10000)
-    let test = await this.UserRepository.findOne({})
-    console.log(test)
-    return { host: os.hostname() };
+    // await this.wait(10000)
+    // let test = await this.UserRepository.findOne({})
+    // console.log(test)
+    return { host: os.hostname(), wow: 'successfully LoOoTaA' };
   }
 
   wait(ms) {
