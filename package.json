@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main",
+    "documentation:serve": "npx @compodoc/compodoc -p tsconfig.json --serve",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -77,6 +78,7 @@
     "uninstall": "0.0.0"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.21",
     "@nestjs/cli": "^8.2.2",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
