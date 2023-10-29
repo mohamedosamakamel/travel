@@ -6,6 +6,7 @@ metadata:
     app: backend
 spec:
   replicas: 1
+  minReadySeconds: 10
   selector: 
     matchLabels:
       lbtype: external
@@ -17,7 +18,21 @@ spec:
     spec:
       containers:
         - name: backend
-          image: registry.digitalocean.com/remah/be:v22
+          image: registry.digitalocean.com/remah/be:v23
+          readinessProbe:
+            periodSeconds: 100
+            httpGet:
+              path: /health
+              port: 3001
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3001
+            initialDelaySeconds: 5
+            periodSeconds: 2
+          # resources:
+          #   requests:
+          #     cpu: 50m
           ports:
           - containerPort: 3001
             name: "3001-port"
@@ -51,6 +66,7 @@ metadata:
     app: frontend
 spec:
   replicas: 1
+  minReadySeconds: 10
   selector: 
     matchLabels:
       lbtype: external
@@ -63,7 +79,19 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: registry.digitalocean.com/remah/be:v22
+          image: registry.digitalocean.com/remah/be:v23
+          readinessProbe:
+            periodSeconds: 1
+            httpGet:
+              path: /health
+              port: 4000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 4000
+          # resources:
+          #   requests:
+          #     cpu: 50m
           ports:
           - containerPort: 4000
             name: "4000-port"

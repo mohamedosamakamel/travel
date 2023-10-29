@@ -20,6 +20,7 @@ import { JwtService } from '@nestjs/jwt';
 import { StudentDocument } from 'src/users/models/student.model';
 import { CreateQuery, FilterQuery } from 'mongoose';
 import { UserRepository } from 'src/users/users.repository';
+import { LoginResponse } from './utils/Responses.model';
 
 @Injectable()
 export class AuthService {
@@ -45,10 +46,7 @@ export class AuthService {
     return user;
   }
 
-  async login(loginDto: LoginDto): Promise<{
-    user: UserDocument;
-    token: string;
-  }> {
+  async login(loginDto: LoginDto): Promise<LoginResponse> {
     const { phone } = loginDto;
     let user = await this.userRepository.findOne({
       phone,
@@ -67,8 +65,14 @@ export class AuthService {
     return { user, token };
   }
 
-  async loginGoogle(user: UserDocument): Promise<UserDocument> {
-    return user;
+  async loginGoogle(user: UserDocument): Promise<LoginResponse> {
+    const options = {};
+    const payload: TokenPayload = {
+      userId: user.id,
+    };
+    const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+
+    return { user, token };
   }
 
   async loginFacebook({

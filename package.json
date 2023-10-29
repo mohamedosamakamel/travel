@@ -10,6 +10,7 @@
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/main",
+    "documentation:serve": "npx @compodoc/compodoc -p tsconfig.json --serve",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
@@ -34,7 +35,7 @@
     "@nestjs/websockets": "^8.2.5",
     "amqp-connection-manager": "^4.1.1",
     "amqplib": "^0.8.0",
-    "aws-sdk": "^2.1101.0",
+    "aws-sdk": "^2.1415.0",
     "axios": "^0.24.0",
     "bcryptjs": "^2.4.3",
     "cache-manager": "^3.6.0",
@@ -77,6 +78,7 @@
     "uninstall": "0.0.0"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.21",
     "@nestjs/cli": "^8.2.2",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",

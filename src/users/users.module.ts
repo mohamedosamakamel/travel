@@ -2,6 +2,7 @@ import {
   CacheModule,
   Module,
   UnprocessableEntityException,
+  forwardRef,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
@@ -16,9 +17,11 @@ import { UploadCloudinary } from 'src/utils/services/upload-cloudinary';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserRepository } from './users.repository';
 import { cacheOperationsModule } from 'src/cache/cache.module';
+import { RateModule } from 'src/rate/rate.module';
 
 @Module({
   imports: [
+    forwardRef(() => RateModule),
     MongooseModule.forFeature([
       {
         name: User.name,

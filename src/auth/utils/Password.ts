@@ -6,7 +6,7 @@ export class Password {
    * @param password the password you want to hash
    */
   static hash(password: string): Promise<string> {
-    return hash(password, 10);
+    return hash(password.toString(), 10);
   }
 
   /**
@@ -21,6 +21,6 @@ export class Password {
     password: string,
     hashed_password: string,
   ): Promise<boolean> {
-    return compare(password, hashed_password);
+    return compare(password.toString(), hashed_password.toString());
   }
 }

@@ -12,6 +12,8 @@ import { CacheConfigService } from './cache/cacheConfigService';
 import { cacheOperationsModule } from './cache/cache.module';
 import { NotificationModule } from './notification/notification.module';
 import { ChangeStreamsModule } from './change-streams/change-streams.module';
+import { RateModule } from './rate/rate.module';
+import { UploadFilesModule } from './upload-files/upload-files.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -21,6 +23,8 @@ import { ChangeStreamsModule } from './change-streams/change-streams.module';
     PhoneConfirmationModule,
     ChatModule,
     NotificationModule,
+    RateModule,
+    UploadFilesModule,
     // ChangeStreamsModule,
     // MessageQueueModule,
     // cacheOperationsModule,
