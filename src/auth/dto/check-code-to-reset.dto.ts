@@ -8,4 +8,5 @@ export class CheckCodeToResetDto {
   @IsString()
   @IsNotEmpty()
   code: string;
+   
 }
