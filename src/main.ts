@@ -16,12 +16,10 @@ import { Student } from './users/models/student.model';
 import { Teacher } from './users/models/teacher.model';
 import { FilterQueryOptionsUser } from './users/dto/filterQueryOptions.dto';
 import ParamsWithId from './utils/paramsWithId.dto';
-import { RedisIoAdapter } from './chat/redisIoAdapter';
 import * as mongoose from 'mongoose'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  /*   app.useWebSocketAdapter(new RedisIoAdapter(app)); */
   app.use(logger('dev'));
   app.enableCors();
   app.use(helmet());

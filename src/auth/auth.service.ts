@@ -42,6 +42,7 @@ export class AuthService {
     user = await this.userRepository.createDoc({
       ...registerationData,
       role: 'student',
+      enabled:true
     } as User);
     return user;
   }

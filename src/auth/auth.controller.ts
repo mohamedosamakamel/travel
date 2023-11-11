@@ -41,9 +41,9 @@ export class AuthController {
   @Post('/signup')
   async register(@Body() RegisterDto: RegisterDto): Promise<StudentDocument> {
     let user = await this.authService.register(RegisterDto);
-    await this.phoneConfirmationService.sendSMS({
-      phone: RegisterDto.phone,
-    });
+    // await this.phoneConfirmationService.sendSMS({
+    //   phone: RegisterDto.phone,
+    // });
     return user;
   }
 
@@ -54,45 +54,45 @@ export class AuthController {
     return await this.authService.login(LoginDto);
   }
 
-  @Public()
-  @UseGuards(GoogleOauthGuard)
-  @Post('/login-googel')
-  async loginGoogle(
-    @Body() _loginGoogleData: LoginGoogleDto,
-  ): Promise<LoginResponse> {
-    return await this.authService.loginGoogle(this.req.me as UserDocument);
-  }
+  // @Public()
+  // @UseGuards(GoogleOauthGuard)
+  // @Post('/login-googel')
+  // async loginGoogle(
+  //   @Body() _loginGoogleData: LoginGoogleDto,
+  // ): Promise<LoginResponse> {
+  //   return await this.authService.loginGoogle(this.req.me as UserDocument);
+  // }
 
-  @Public()
-  @Post('/login-facebook')
-  async loginFacebook(
-    @Body() { accessToken }: LoginFacebookDto,
-  ): Promise<UserDocument> {
-    return await this.authService.loginFacebook({ accessToken });
-  }
+  // @Public()
+  // @Post('/login-facebook')
+  // async loginFacebook(
+  //   @Body() { accessToken }: LoginFacebookDto,
+  // ): Promise<UserDocument> {
+  //   return await this.authService.loginFacebook({ accessToken });
+  // }
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('/check-code-to-reset')
-  async checkCodeToReset(
-    @Body() { phone, code }: CheckCodeToResetDto,
-  ): Promise<void> {
-    return await this.phoneConfirmationService.verificationCode({
-      phone,
-      code,
-    });
-  }
+  // @Public()
+  // @HttpCode(HttpStatus.OK)
+  // @Post('/check-code-to-reset')
+  // async checkCodeToReset(
+  //   @Body() { phone, code }: CheckCodeToResetDto,
+  // ): Promise<void> {
+  //   return await this.phoneConfirmationService.verificationCode({
+  //     phone,
+  //     code,
+  //   });
+  // }
 
-  @Public()
-  @HttpCode(HttpStatus.OK)
-  @Post('reset-password')
-  async resetPassword(
-    @Body() { phone, code, password }: ResetPasswordDto,
-  ): Promise<UserDocument> {
-    await this.phoneConfirmationService.verificationCode({ phone, code });
-    return await this.userRepository.updateOne(
-      { phone } as FilterQuery<UserDocument>,
-      { password } as UpdateUserDto,
-    );
-  }
+  // @Public()
+  // @HttpCode(HttpStatus.OK)
+  // @Post('reset-password')
+  // async resetPassword(
+  //   @Body() { phone, code, password }: ResetPasswordDto,
+  // ): Promise<UserDocument> {
+  //   await this.phoneConfirmationService.verificationCode({ phone, code });
+  //   return await this.userRepository.updateOne(
+  //     { phone } as FilterQuery<UserDocument>,
+  //     { password } as UpdateUserDto,
+  //   );
+  // }
 }
